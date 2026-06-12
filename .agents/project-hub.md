@@ -57,7 +57,7 @@ All profile data lives in `src/data.ts`. Agents must NOT hardcode content — re
 |------|--------|-------|
 | Framework setup | 🟢 Approved | Clodi |
 | Content changes (logo, text, titles) | 🟢 Approved | Clodi |
-| Git / GitHub / Firebase deploy | 🔵 In progress | Clodi |
+| Git / GitHub / Firebase deploy | 🟢 Approved | Clodi |
 | Arcade station redesign (6 slots) | ⚪ Not started | — |
 | Pac-Toe redesign (3x3/5x5/7x7 + 6 levels) | ⚪ Not started | — |
 | Zelda in Mario World | ⚪ Not started | — |
