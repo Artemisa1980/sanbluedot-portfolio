@@ -544,6 +544,8 @@ a {
   width: min(300px, 78vw);
   margin-left: calc(min(300px, 78vw) / -2);
   will-change: transform;
+  /* GSAP owns transforms per-frame inside the carousel — no transform transition */
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .carousel__stage .cab:hover {
   transform: none; /* GSAP owns transforms; disable the grid-era hover lift */

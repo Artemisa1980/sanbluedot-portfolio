@@ -19,6 +19,12 @@ export default function GameShell({ gameId, screenEl, onClose }: GameShellProps)
   const [phase, setPhase] = useState<ShellPhase>('zoom');
   const Game = GAME_REGISTRY[gameId];
 
+  // a game marked ready but missing from the registry would render nothing
+  // with scroll locked — bail out instead
+  useEffect(() => {
+    if (phase === 'play' && !Game) onClose();
+  }, [phase, Game, onClose]);
+
   // lock page scroll while the shell is open
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -50,9 +56,10 @@ export default function GameShell({ gameId, screenEl, onClose }: GameShellProps)
     }
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const rect = screenEl?.getBoundingClientRect();
+    let tween: gsap.core.Tween;
     if (!rect || reduced) {
-      gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.25, onComplete: () => setPhase('boot') });
-      return;
+      tween = gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.25, onComplete: () => setPhase('boot') });
+      return () => { tween?.kill(); };
     }
     gsap.set(el, {
       left: rect.left,
@@ -61,7 +68,7 @@ export default function GameShell({ gameId, screenEl, onClose }: GameShellProps)
       height: rect.height,
       opacity: 1,
     });
-    gsap.to(el, {
+    tween = gsap.to(el, {
       left: 0,
       top: 0,
       width: window.innerWidth,
@@ -70,6 +77,7 @@ export default function GameShell({ gameId, screenEl, onClose }: GameShellProps)
       ease: 'power3.inOut',
       onComplete: () => setPhase('boot'),
     });
+    return () => { tween?.kill(); };
   }, [phase, screenEl]);
 
   return (

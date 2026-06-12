@@ -14,6 +14,7 @@ interface ArcadeCarouselProps {
 export default function ArcadeCarousel({ paused, onLaunch }: ArcadeCarouselProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(0);
+  const focusedRef = useRef(0);
   const dragX = useRef<number | null>(null);
   const didDrag = useRef(false);
 
@@ -27,6 +28,7 @@ export default function ArcadeCarousel({ paused, onLaunch }: ArcadeCarouselProps
 
   // position all cabinets relative to the focused index
   useEffect(() => {
+    focusedRef.current = focused;
     const stage = stageRef.current;
     if (!stage) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -46,6 +48,7 @@ export default function ArcadeCarousel({ paused, onLaunch }: ArcadeCarouselProps
           zIndex: 10 - abs,
           duration: reduced ? 0 : 0.55,
           ease: 'power3.inOut',
+          overwrite: 'auto',
         });
         cab.classList.toggle('cab--focused', off === 0);
         cab.style.pointerEvents = abs > 2 ? 'none' : 'auto';
@@ -65,11 +68,11 @@ export default function ArcadeCarousel({ paused, onLaunch }: ArcadeCarouselProps
     const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; }, { threshold: 0.3 });
     io.observe(stage);
     const step = (dir: number) => {
-      setFocused((f) => {
-        const next = Math.max(0, Math.min(GAMES.length - 1, f + dir));
-        if (next !== f) sfx.hover();
-        return next;
-      });
+      const next = Math.max(0, Math.min(GAMES.length - 1, focusedRef.current + dir));
+      if (next !== focusedRef.current) {
+        sfx.hover();
+        setFocused(next);
+      }
     };
     const onKey = (e: KeyboardEvent) => {
       if (!inView) return;

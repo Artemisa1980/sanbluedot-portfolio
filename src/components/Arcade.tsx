@@ -15,18 +15,17 @@ export default function Arcade() {
   const rootRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<ActiveGame | null>(null);
 
-  // cabinets rise from below as you scroll in
+  // carousel rises from below as you scroll in
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        '.cab',
+        '.carousel',
         { y: 90, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.1,
-          ease: 'back.out(1.3)',
+          ease: 'power3.out',
           scrollTrigger: { trigger: '.carousel', start: 'top 80%' },
         }
       );

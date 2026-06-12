@@ -25,12 +25,13 @@ export default function CartridgeLoader({
   const pctRef = useRef<HTMLSpanElement>(null);
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
+  // reduced-motion: skip coin + cube entirely — progress bar only
+  const reduced = useRef(window.matchMedia('(prefers-reduced-motion: reduce)').matches).current;
 
   useEffect(() => {
     if (withCoin) sfx.coin();
     const q = gsap.utils.selector(rootRef);
     const progress = { v: 0 };
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const tl = gsap.timeline({
       onComplete: () => {
         sfx.boot();
@@ -44,9 +45,11 @@ export default function CartridgeLoader({
         { y: 0, rotate: 720, opacity: 1, duration: 0.8, ease: 'bounce.out' }
       );
     }
-    tl.fromTo(q('.boot__title'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4 }, '-=0.2')
-      .fromTo(q('.boot__cube'), { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' })
-      .to(progress, {
+    tl.fromTo(q('.boot__title'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4 }, '-=0.2');
+    if (!reduced) {
+      tl.fromTo(q('.boot__cube'), { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' });
+    }
+    tl.to(progress, {
         v: 100,
         duration: reduced ? Math.min(duration, 0.8) : duration,
         ease: 'steps(34)',
@@ -60,16 +63,20 @@ export default function CartridgeLoader({
     return () => {
       tl.kill();
     };
-  }, [withCoin, duration]);
+  }, [withCoin, duration, reduced]);
 
   return (
     <div className="boot crt-fx" ref={rootRef}>
-      {withCoin && <div className="boot__coin">🪙</div>}
+      {withCoin && !reduced && <div className="boot__coin">🪙</div>}
       <div className="boot__title">{label}</div>
-      <div className="boot__cube">
-        <RubikCube frantic />
-      </div>
-      <div className="boot__hint">SOLVING THE LOAD-CUBE… CLICK IT TO HELP!</div>
+      {!reduced && (
+        <>
+          <div className="boot__cube">
+            <RubikCube frantic />
+          </div>
+          <div className="boot__hint">SOLVING THE LOAD-CUBE… CLICK IT TO HELP!</div>
+        </>
+      )}
       <div className="boot__bar">
         <div className="boot__bar-fill" ref={barRef} />
       </div>
