@@ -51,14 +51,6 @@ export const GAMES: GameInfo[] = [
     ready: false,
   },
   {
-    id: 'zelda-mario',
-    title: 'Legend of the Mushroom Kingdom',
-    description:
-      "A hero's quest across 6 living worlds: slash goombas, loot ?-blocks, grab the key and warp-pipe onward. The Shell Dragon awaits!",
-    icon: '🗡️',
-    ready: true,
-  },
-  {
     id: 'barista',
     title: 'Starbucks Retro Barista',
     description:

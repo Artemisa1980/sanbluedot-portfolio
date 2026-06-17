@@ -24,8 +24,13 @@ export default function TVStudio() {
     canvas.width = 220;
     canvas.height = 140;
     let raf = 0;
+    let visible = true;
+    // freeze the static while the TV is scrolled out of view
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(canvas);
     const draw = () => {
       raf = requestAnimationFrame(draw);
+      if (!visible) return;
       const img = ctx.createImageData(canvas.width, canvas.height);
       const d = img.data;
       // heavy snow during channel change / power off, faint film grain otherwise
@@ -38,7 +43,10 @@ export default function TVStudio() {
       ctx.putImageData(img, 0, 0);
     };
     draw();
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+    };
   }, [power, staticBurst]);
 
   useEffect(() => {

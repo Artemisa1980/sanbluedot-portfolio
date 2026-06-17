@@ -7,3 +7,16 @@ dist/
 *.log
 .firebase/
 screenshots/
+
+# Internal Sandy + Clodi team files — never publish to the public repo
+core.md
+conductor.md
+work-orchestra.md
+brutal-critic-(bc).md
+relay-log.md
+.agents/
+docs/superpowers/
+
+# Personal brand assets (kept on disk; site is deployed from the local build)
+public/sanblue-logo.png
+public/sanblue-logo-m13.png

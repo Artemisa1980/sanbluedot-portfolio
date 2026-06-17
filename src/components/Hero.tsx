@@ -21,6 +21,7 @@ export default function Hero({ booted }: { booted: boolean }) {
     const canvas = starsRef.current!;
     const ctx = canvas.getContext('2d')!;
     let raf = 0;
+    let visible = true;
     const stars = Array.from({ length: 140 }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -38,9 +39,13 @@ export default function Hero({ booted }: { booted: boolean }) {
     };
     resize();
     window.addEventListener('resize', resize);
+    // skip drawing while the hero is scrolled out of view (saves battery on long pages)
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(canvas);
 
     const draw = () => {
       raf = requestAnimationFrame(draw);
+      if (!visible) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const t = performance.now() / 1000;
       for (const st of stars) {
@@ -59,6 +64,7 @@ export default function Hero({ booted }: { booted: boolean }) {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      io.disconnect();
     };
   }, []);
 

@@ -308,6 +308,10 @@ export default function SphereGallery({ paused, onLaunch }: SphereGalleryProps) 
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
+    // pause the render loop while the sphere is scrolled out of view (same effect as `paused`)
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(wrap);
 
     // ambient pixel stars floating between camera and the tile wall
     const starGeo = new THREE.BufferGeometry();
@@ -625,7 +629,7 @@ export default function SphereGallery({ paused, onLaunch }: SphereGalleryProps) 
     const scratch = new THREE.Vector3();
     const animate = () => {
       raf = requestAnimationFrame(animate);
-      if (pausedRef.current) return;
+      if (pausedRef.current || !visible) return;
 
       // gentle idle drift after a few seconds without input
       if (!reduced && !dragging && performance.now() - lastInteract > 3000) {
@@ -684,6 +688,7 @@ export default function SphereGallery({ paused, onLaunch }: SphereGalleryProps) 
       disposed = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io.disconnect();
       canvas.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
