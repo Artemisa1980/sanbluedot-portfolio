@@ -64,7 +64,7 @@ export default function Analytics() {
   return (
     <section className="section analytics" id="analytics" ref={rootRef}>
       <div className="section-tag" style={{ background: 'var(--mint)' }}>
-        📊 EXECUTIVE ANALYTICS DESK WITH CLAUDI/GIM PM
+        📊 EXECUTIVE ANALYTICS DESK WITH CLODI/GIM PM
       </div>
 
       <div className="analytics__grid">
