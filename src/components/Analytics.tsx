@@ -1,12 +1,47 @@
-import { useEffect, useRef } from 'react';
+// src/components/Analytics.tsx
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CompoundCalculator from './CompoundCalculator';
+import FinancialDashboard from './FinancialDashboard';
+import ResearchLogRow from './ResearchLogRow';
+import { researchLogs } from '../data/researchLogs';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Analytics() {
   const rootRef = useRef<HTMLElement>(null);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
+
+  const selectedLog = selectedLogId
+    ? researchLogs.find((l) => l.id === selectedLogId) ?? null
+    : null;
+
+  const swapTo = (next: () => void) => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !leftPanelRef.current) {
+      next();
+      return;
+    }
+    gsap.to(leftPanelRef.current, {
+      opacity: 0,
+      y: -16,
+      duration: 0.25,
+      ease: 'power1.in',
+      onComplete: () => {
+        next();
+        gsap.fromTo(
+          leftPanelRef.current,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
+        );
+      },
+    });
+  };
+
+  const handleSelect = (id: string) => swapTo(() => setSelectedLogId(id));
+  const handleBack = () => swapTo(() => setSelectedLogId(null));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -33,33 +68,20 @@ export default function Analytics() {
       </div>
 
       <div className="analytics__grid">
-        <CompoundCalculator />
+        <div ref={leftPanelRef}>
+          {selectedLog ? (
+            <FinancialDashboard log={selectedLog} onBack={handleBack} />
+          ) : (
+            <CompoundCalculator />
+          )}
+        </div>
 
         <div className="card">
           <h3 className="gh__title" style={{ marginBottom: 22 }}>📚 Study Files & Research Logs</h3>
-          <div className="studyfile">
-            <span style={{ fontSize: 26 }}>📊</span>
-            <div>
-              <div className="studyfile__name">Coming Soon Research and Showcases</div>
-              <div className="studyfile__fmt">Format: PDF Analysis • Operations & Logistics</div>
-            </div>
-            <span className="cert__year">SOON</span>
-          </div>
-          <div className="studyfile">
-            <span style={{ fontSize: 26 }}>📈</span>
-            <div>
-              <div className="studyfile__name">Coming Soon Research and Showcases</div>
-              <div className="studyfile__fmt">Format: Compound Excel • Revenue & Audit</div>
-            </div>
-            <span className="cert__year">SOON</span>
-          </div>
-          <div className="studyfile">
-            <span style={{ fontSize: 26 }}>🧾</span>
-            <div>
-              <div className="studyfile__name">Coming Soon Research and Showcases</div>
-              <div className="studyfile__fmt">Format: Interactive Sheet • Unit Economics</div>
-            </div>
-            <span className="cert__year">SOON</span>
+          <div className="research-list">
+            {researchLogs.map((log) => (
+              <ResearchLogRow key={log.id} log={log} onSelect={handleSelect} />
+            ))}
           </div>
         </div>
       </div>
