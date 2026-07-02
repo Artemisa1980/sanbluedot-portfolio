@@ -29,8 +29,7 @@ npm run build    # production bundle in dist/
 All sound effects are synthesized WebAudio chiptune beeps (no assets); mute toggle in the header.
 
 ---
-
 <div class="site-footer">
 <span class="brand">sanblue<sup class="dot">dot</sup></span> — retro dev-station
-<span class="copyright">© <year> Sandy E. Quintero</span>
+<span class="copyright">© 2026 Sandy E. Quintero</span>
 </div>
