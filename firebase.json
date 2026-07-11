@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "claude-portfolio",
+    "target": "sanbluedot-portfolio",
     "public": "dist",
     "ignore": [
       "firebase.json",
