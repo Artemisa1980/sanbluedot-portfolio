@@ -27,3 +27,7 @@ npm run build    # production bundle in dist/
 | System Room | GitHub contribution grid (staggered pop-in), typed commit console, **Mail Room Terminal** with typed STDOUT + mailto |
 
 All sound effects are synthesized WebAudio chiptune beeps (no assets); mute toggle in the header.
+
+---
+
+© 2026 Sandy E. Quintero — sanblueᵈᵒᵗ · retro dev-station
