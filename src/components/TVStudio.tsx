@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TV_CHANNELS } from '../data';
@@ -79,17 +79,36 @@ export default function TVStudio() {
     return () => ctx.revert();
   }, []);
 
-  function tune(i: number) {
-    if (i === channel || !power) return;
+  const runTune = useCallback((i: number) => {
     sfx.channel();
     setStaticBurst(true);
     gsap.to(knobRef.current, { rotate: i * 90, duration: 0.45, ease: 'back.out(2)' });
-    gsap.fromTo(programRef.current, { opacity: 0, scaleY: 0.05 }, { opacity: 1, scaleY: 1, duration: 0.4, delay: 0.25 });
+    if (programRef.current) {
+      gsap.fromTo(programRef.current, { opacity: 0, scaleY: 0.05 }, { opacity: 1, scaleY: 1, duration: 0.4, delay: 0.25 });
+    }
     setTimeout(() => {
       setChannel(i);
       setStaticBurst(false);
     }, 260);
+  }, []);
+
+  function tune(i: number) {
+    if (i === channel || !power) return;
+    runTune(i);
   }
+
+  // External "WATCH IN STUDIO" buttons (research logs) tune the TV by channel id.
+  useEffect(() => {
+    const onTune = (e: Event) => {
+      const id = (e as CustomEvent<number>).detail;
+      const idx = TV_CHANNELS.findIndex((c) => c.id === id);
+      if (idx < 0) return;
+      setPower(true);
+      runTune(idx);
+    };
+    window.addEventListener('tv:tune', onTune);
+    return () => window.removeEventListener('tv:tune', onTune);
+  }, [runTune]);
 
   function togglePower() {
     sfx.click();
@@ -109,13 +128,23 @@ export default function TVStudio() {
           <div className="tvset__screen-wrap">
             <div className="tvset__screen">
               <canvas className="tvset__noise" ref={noiseRef} />
-              {power && (
+              {power && (active.videoSrc ? (
+                <video
+                  className="tvset__video"
+                  src={active.videoSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                />
+              ) : (
                 <div className="tvset__program" ref={programRef}>
                   <span className="tvset__prog-icon">{active.icon}</span>
                   <div className="tvset__prog-title">CH_{String(active.id).padStart(2, '0')} ▸ {active.title}</div>
                   <div className="tvset__prog-meta">{active.genre} • {active.length}</div>
                 </div>
-              )}
+              ))}
               {!power && <div className="tvset__off">⏻ CINE_OFF — PRESS POWER</div>}
             </div>
           </div>

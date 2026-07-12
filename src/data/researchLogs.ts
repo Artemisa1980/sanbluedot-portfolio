@@ -4,6 +4,8 @@ export interface ResearchLog {
   title: string;
   legend: string;
   status: 'live' | 'coming-soon';
+  /** If set, a "WATCH IN STUDIO" button scrolls to the TV Studio and tunes to this channel id. */
+  studioChannelId?: number;
   links?: { html: string; pdf: string; doi: string; video?: string };
   financials?: {
     bomCost: { from: number; to: number; fromYear: number; toYear: number; source: string };
@@ -19,6 +21,7 @@ export const researchLogs: ResearchLog[] = [
     legend:
       'A 10-year outlook on the US–China humanoid race — and what getting them built costs us later.',
     status: 'live',
+    studioChannelId: 1,
     links: {
       html: 'https://artemisa1980.github.io/ai-robot-race/',
       pdf: 'https://artemisa1980.github.io/ai-robot-race/The-AI-Robot-Race-and-Its-Hidden-Cost.pdf',

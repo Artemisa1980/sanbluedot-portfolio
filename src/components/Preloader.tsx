@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import SanblueBadge from './SanblueBadge';
 
 const BOOT_LINES = [
   'SANDY_OS v2.0 // BIOS CHECK ............ <span class="ok">OK</span>',
@@ -51,7 +52,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="preloader crt-fx" ref={rootRef}>
-      <img src="/sanblue-logo-m13.png" alt="sanblue" className="preloader__logo" />
+      <SanblueBadge className="preloader__logo" />
       <div className="preloader__lines" ref={linesRef} />
       <div className="preloader__bar">
         <div className="preloader__bar-fill" ref={barRef} />

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { PROFILE } from '../data';
 import { sfx, setMuted, isMuted } from '../sound';
 import SanblueWordmark from './SanblueWordmark';
+import SanblueBadge from './SanblueBadge';
 
 const NAV = [
   { href: '#arcade', label: './arcade' },
@@ -40,7 +41,7 @@ export default function Header() {
 
   return (
     <header className={`header ${shrunk ? 'header--shrunk' : ''}`}>
-      <img src="/sanblue-logo-m13.png" alt="sanblue logo" className="header__logo" />
+      <SanblueBadge className="header__logo" interactive />
       <div className="header__id">
         <span className="header__name">
           {PROFILE.handle} <span className="header__ver">{PROFILE.version}</span>

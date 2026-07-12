@@ -9,6 +9,7 @@ dist/
 screenshots/
 
 # Internal Sandy + Clodi team files — never publish to the public repo
+CLAUDE.md
 core.md
 conductor.md
 work-orchestra.md
@@ -17,6 +18,7 @@ relay-log.md
 .agents/
 docs/superpowers/
 
-# Personal brand assets (kept on disk; site is deployed from the local build)
-public/sanblue-logo.png
-public/sanblue-logo-m13.png
+# Personal brand assets — kept on disk; site deploys from the local build (consolidated 2026-07-11)
+public/sanblue*
+brand-assets/
+public/badge-circular-crop-guide.md

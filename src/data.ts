@@ -177,44 +177,44 @@ export interface TVChannel {
   length: string;
   icon: string;
   synopsis: string;
+  /** Optional video URL/file. When set, it plays inside the CRT; otherwise the program card shows. */
+  videoSrc?: string;
 }
 
 export const TV_CHANNELS: TVChannel[] = [
   {
     id: 1,
-    title: 'Behind the Scenes: My First Portfolio',
-    genre: 'Creative Vlog / Humour',
-    length: '2:45 min',
-    icon: '💻',
+    title: 'The AI Robot Race and Its Hidden Cost',
+    genre: 'Research Film · sanblueᵈᵒᵗ',
+    length: '~1:30 min',
+    icon: '🤖',
     synopsis:
-      'A fun, honest vlog about late nights learning React, wrestling TypeScript brackets, and celebrating when the page finally compiles. Zero placeholders, pure reality!',
+      'A wordless retro-futurist short for the published research. One small salvager robot, DOT, wanders mountains of discarded humanoids and recovers the single rare-earth magnet the world fought to mine — the one we throw away. We made the trash, and the salvager too.',
+    // videoSrc: 'https://…'  // ← drop the finished video URL/file here to play it in the CRT
   },
   {
     id: 2,
-    title: 'The Science of the Perfect Cappuccino',
-    genre: 'Coffee Mastery',
-    length: '3:15 min',
-    icon: '☕️',
-    synopsis:
-      'Eleven years of milk foam distilled into three minutes: temperature, texture, and the art of pouring hearts that survive until the first sip.',
+    title: 'Coming Soon',
+    genre: 'Transmission Pending',
+    length: '—',
+    icon: '📡',
+    synopsis: 'A new transmission is being recorded. Stay tuned.',
   },
   {
     id: 3,
-    title: 'The Night Audit Chronicles',
-    genre: 'Hospitality Comedy',
-    length: '4:00 min',
-    icon: '🏨',
-    synopsis:
-      'True stories from the Hilton night shift: balancing the books at 3 AM, sleepwalking guests, and the eternal mystery of the lobby printer.',
+    title: 'Coming Soon',
+    genre: 'Transmission Pending',
+    length: '—',
+    icon: '📡',
+    synopsis: 'A new transmission is being recorded. Stay tuned.',
   },
   {
     id: 4,
-    title: 'AI Prompting: A Creative Experiment',
-    genre: 'AI Exploration',
-    length: '1:50 min',
-    icon: '🧠',
-    synopsis:
-      'Prompt-engineering experiments: turning an idea into an interactive system by conversing with AI models. Spoiler: specificity is everything.',
+    title: 'Coming Soon',
+    genre: 'Transmission Pending',
+    length: '—',
+    icon: '📡',
+    synopsis: 'A new transmission is being recorded. Stay tuned.',
   },
 ];
 

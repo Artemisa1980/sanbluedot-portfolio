@@ -80,16 +80,22 @@ export default function ResearchLogRow({ log, onSelect }: ResearchLogRowProps) {
           >
             🎓 CITE
           </a>
-          {log.links.video && (
+          {log.studioChannelId !== undefined && (
             <a
               className="research-row__btn"
-              href={log.links.video}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => { e.stopPropagation(); sfx.click(); }}
+              href="#tv"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                sfx.click();
+                document.getElementById('tv')?.scrollIntoView({ behavior: 'smooth' });
+                window.dispatchEvent(
+                  new CustomEvent('tv:tune', { detail: log.studioChannelId })
+                );
+              }}
               onMouseEnter={(e) => { e.stopPropagation(); sfx.hover(); }}
             >
-              🎬 VIDEO
+              📺 WATCH IN STUDIO
             </a>
           )}
         </div>
