@@ -18,7 +18,7 @@ relay-log.md
 .agents/
 docs/superpowers/
 
-# Personal brand assets — kept on disk; site deploys from the local build (consolidated 2026-07-11)
-public/sanblue*
+# Brand SOURCES stay on disk, never committed. Site-displayed assets in public/ ARE committed —
+# they ship to the public web anyway (decision 2026-07-15). Keep public/ to site-referenced files only.
 brand-assets/
-public/badge-circular-crop-guide.md
+docs/badge-circular-crop-guide.md
