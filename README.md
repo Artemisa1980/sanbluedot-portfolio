@@ -4,6 +4,8 @@ Awwwards-style retro arcade portfolio for **Sandy E. Quintero**, rebuilt from th
 with **React 19 + GSAP (ScrollTrigger) + Three.js**, themed on the sanblue logo palette
 (navy, gold, pink, mint, cyan, purple) fused with '80s CRT arcade aesthetics.
 
+**Live:** https://sandy-sysdev-v2.web.app
+
 ## Run it
 
 ```bash
@@ -18,12 +20,12 @@ npm run build    # production bundle in dist/
 | --- | --- |
 | Preloader | CRT boot sequence (SANDY_OS BIOS check + progress bar) |
 | Hero | Pixel starfield canvas, typewriter, **interactive 3D Rubik's cube** — drag to spin, click to twist a layer |
-| Arcade Station | Click the READY cabinet → coin drop → **Rubik's cube cartridge loader** → playable **Pac-Toe** vs ghost AI. Locked cabinets shake. |
+| Arcade Station | **Three.js sphere gallery** — look around from inside a sphere of game cartridges (drag + inertia), tap a READY one → zoom → **Rubik's cube cartridge loader** → playable **Pac-Toe** vs ghost AI |
 | Reception Desk | Bio, languages, certification vault, education cards — GSAP scroll reveals |
-| Analytics Desk | Compound interest calculator with animated counters + live SVG growth chart |
+| Analytics Desk | **Research showcase** — published book with Zenodo DOI, real-data financial dashboard (GSAP build sequence), plus a compound-interest calculator with animated counters + live SVG growth chart |
 | Career Timeline | Scroll-scrubbed gradient rail, alternating XP cards |
 | Skill Matrix | Animated dashed-gradient power bars with count-up scores |
-| TV Studio | Working CRT static (canvas noise), rotating channel knob, power switch, 4 channels |
+| TV Studio | Working CRT static (canvas noise), rotating channel knob, power switch, 4 channels — channel 01 hosts the research film |
 | System Room | GitHub contribution grid (staggered pop-in), typed commit console, **Mail Room Terminal** with typed STDOUT + mailto |
 
 All sound effects are synthesized WebAudio chiptune beeps (no assets); mute toggle in the header.

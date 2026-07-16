@@ -16,9 +16,8 @@ work-orchestra.md
 brutal-critic-(bc).md
 relay-log.md
 .agents/
-docs/superpowers/
+docs/
 
 # Brand SOURCES stay on disk, never committed. Site-displayed assets in public/ ARE committed —
 # they ship to the public web anyway (decision 2026-07-15). Keep public/ to site-referenced files only.
 brand-assets/
-docs/badge-circular-crop-guide.md
