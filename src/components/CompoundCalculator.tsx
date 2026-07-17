@@ -118,8 +118,8 @@ export default function CompoundCalculator() {
       >
         <defs>
           <linearGradient id="growFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#5eead4" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#5eead4" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="#eab13f" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#eab13f" stopOpacity="0.02" />
           </linearGradient>
         </defs>
         {[0.25, 0.5, 0.75].map((g) => (
@@ -134,14 +134,14 @@ export default function CompoundCalculator() {
           />
         ))}
         <path d={chart.area} fill="url(#growFill)" />
-        <path d={chart.line} fill="none" stroke="#5eead4" strokeWidth="3.5" strokeLinecap="round" />
+        <path d={chart.line} fill="none" stroke="#eab13f" strokeWidth="3.5" strokeLinecap="round" />
         {chart.points.map(([x, y], i) => (
           <rect key={i} x={x - 3.5} y={y - 3.5} width="7" height="7" fill="#f7c948" />
         ))}
-        <text x={chart.PAD} y={chart.H - 8} fill="#67e8f9" fontSize="13" fontFamily="VT323">
+        <text x={chart.PAD} y={chart.H - 8} fill="#7cb3e8" fontSize="13" fontFamily="VT323">
           YEAR 0
         </text>
-        <text x={chart.W - chart.PAD} y={chart.H - 8} fill="#67e8f9" fontSize="13" fontFamily="VT323" textAnchor="end">
+        <text x={chart.W - chart.PAD} y={chart.H - 8} fill="#7cb3e8" fontSize="13" fontFamily="VT323" textAnchor="end">
           YEAR {years}
         </text>
       </svg>

@@ -38,7 +38,7 @@ const SECTORS: Record<Sector, { k: number; name: string; legend: string; bonus: 
 };
 
 const LEVEL_NAMES = ['ROOKIE', 'PLAYER', 'PRO', 'EXPERT', 'MASTER', 'ARCADE GOD'];
-const PALETTE = ['#f7c948', '#ff6ea9', '#67e8f9', '#5eead4', '#a78bfa', '#ff7b6b'];
+const PALETTE = ['#f7c948', '#ff6ea9', '#7cb3e8', '#eab13f', '#a78bfa', '#ff7b6b'];
 const STYLES: SpriteStyle[] = ['classic', 'neon', 'pixel'];
 
 interface SaveData {

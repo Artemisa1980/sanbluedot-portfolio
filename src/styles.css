@@ -12,11 +12,20 @@
   --paper: #fbf7ea;
   --gold: #f7c948;
   --pink: #ff6ea9;
-  --mint: #5eead4;
-  --cyan: #67e8f9;
+  --mint: #eab13f;
+  --cyan: #7cb3e8;
   --purple: #a78bfa;
   --coral: #ff7b6b;
   --grad-hex: linear-gradient(120deg, var(--pink), var(--purple), var(--cyan), var(--mint));
+
+  /* color workshop 2026-07-16 — Sandy's section-background map (bg only; letters/tags pass pending) */
+  --sage: #9caf88;
+  --dustyblue: #7fa3b8;
+  --claylight: #ead9d1;
+  --amberlight: #f4e3bc;
+  --greige: #b5ab9f;
+  --sagelight: #d8e0c4;
+  --clay: #a87f76;
 
   --font-pixel: 'Press Start 2P', monospace;
   --font-term: 'VT323', monospace;
@@ -73,9 +82,14 @@ a {
 }
 
 .section-tag {
-  display: inline-flex;
+  /* workshop 07-16 (Sandy): every tag same width, centered in the section */
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
+  width: min(760px, 100%);
+  margin: 0 auto 48px;
+  text-align: center;
   filter: saturate(0.62) brightness(0.94);
   font-family: var(--font-pixel);
   font-size: clamp(10px, 1.4vw, 14px);
@@ -85,7 +99,6 @@ a {
   border-radius: 14px;
   box-shadow: var(--shadow-hard);
   background: var(--paper);
-  margin-bottom: 48px;
   text-transform: uppercase;
 }
 
@@ -99,6 +112,35 @@ a {
 .crt {
   background: var(--ink);
   color: var(--cream);
+}
+
+/* section background map — color workshop 2026-07-16 (Sandy's picks).
+   Sections without an own class get their bg here by id; hero/xp/analytics/footer set theirs
+   in their own blocks. (The standalone Skills section was merged into Reception 07-16.) */
+#arcade {
+  background: var(--clay); /* Sandy's redirect 07-16 (was dusty blue / proposal 13) */
+}
+#reception {
+  background: var(--amberlight); /* Sandy's redirect 07-16 (was clay-light/15) */
+}
+#tv {
+  background: var(--amberlight); /* Sandy's redirect 07-16 (was sage-light/20) */
+}
+#mail {
+  background: var(--clay);
+}
+
+/* section dividers — workshop 07-16 (Sandy): rail-gradient line (--grad-hex, the timeline
+   rail colors) at every section boundary, same 4px weight as the footer's old gold line.
+   hero→arcade needs none: the gold marquee band already frames that boundary. */
+#reception,
+#experience,
+#analytics,
+#tv,
+#mail,
+.footer {
+  border-top: 4px solid;
+  border-image: var(--grad-hex) 1;
 }
 
 /* scanlines + vignette over dark panels */
@@ -126,6 +168,15 @@ a {
   pointer-events: none;
   background: radial-gradient(ellipse at center, transparent 55%, rgba(5, 8, 25, 0.55) 100%);
   z-index: 5;
+}
+/* workshop 07-16 (Sandy): on the new section bgs the vignette reads as a center glow — sections
+   drop it; dark inner panels (mail terminal, sphere vault, loaders, pac-toe) keep it */
+.hero.crt-fx::after,
+.footer.crt-fx::after,
+.preloader.crt-fx::after,
+#arcade.crt-fx::after,
+.xp.crt-fx::after {
+  content: none;
 }
 
 .btn {
@@ -183,7 +234,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--ink);
+  background: var(--dustyblue); /* Sandy's favorite blue — boot screen (workshop 07-16) */
   color: var(--mint);
   display: flex;
   flex-direction: column;
@@ -194,7 +245,7 @@ a {
 .preloader__logo {
   width: 110px;
   height: 110px;
-  filter: drop-shadow(0 0 24px rgba(103, 232, 249, 0.45));
+  filter: drop-shadow(0 0 24px rgba(124, 179, 232, 0.45));
 }
 .preloader__lines {
   font-family: var(--font-term);
@@ -354,6 +405,7 @@ a {
   padding: 140px 6vw 80px;
   position: relative;
   overflow: hidden;
+  background: var(--sage); /* proposal 08 — Sandy's pick (workshop 07-16); .crt ink stays for the other dark sections */
 }
 .hero__stars {
   position: absolute;
@@ -630,7 +682,7 @@ a {
   margin: 0 auto;
   border-radius: 22px;
   overflow: hidden;
-  border: 3px solid rgba(103, 232, 249, 0.35);
+  border: 3px solid rgba(124, 179, 232, 0.35);
   background: var(--ink);
   outline: none;
 }
@@ -654,7 +706,7 @@ a {
   color: var(--cyan);
   opacity: 0.85;
   pointer-events: none;
-  text-shadow: 0 0 8px rgba(103, 232, 249, 0.6);
+  text-shadow: 0 0 8px rgba(124, 179, 232, 0.6);
 }
 .sphere__hud--tl {
   top: 14px;
@@ -733,7 +785,7 @@ a {
 .cab {
   position: relative;
   background: linear-gradient(180deg, var(--navy-2), var(--navy));
-  border: 3px solid rgba(103, 232, 249, 0.35);
+  border: 3px solid rgba(124, 179, 232, 0.35);
   border-radius: 18px 18px 10px 10px;
   padding: 18px 18px 22px;
   cursor: pointer;
@@ -786,7 +838,7 @@ a {
 }
 .cab__icon {
   font-size: 52px;
-  filter: drop-shadow(0 0 14px rgba(103, 232, 249, 0.6));
+  filter: drop-shadow(0 0 14px rgba(124, 179, 232, 0.6));
   transition: transform 0.25s ease;
 }
 .cab:hover .cab__icon {
@@ -866,7 +918,7 @@ a {
   gap: 22px;
 }
 .boot__coin {
-  font-size: 64px;
+  line-height: 0;
   filter: drop-shadow(0 0 20px rgba(247, 201, 72, 0.8));
 }
 .boot__title {
@@ -968,7 +1020,7 @@ a {
 .game__cell {
   aspect-ratio: 1;
   background: rgba(27, 35, 88, 0.7);
-  border: 2px solid rgba(103, 232, 249, 0.4);
+  border: 2px solid rgba(124, 179, 232, 0.4);
   border-radius: 14px;
   font-size: clamp(34px, 7vw, 52px);
   display: grid;
@@ -984,13 +1036,13 @@ a {
   cursor: default;
 }
 .game__cell--win {
-  background: rgba(94, 234, 212, 0.3);
+  background: rgba(234, 177, 63, 0.3);
   border-color: var(--mint);
   animation: cellWin 0.5s ease infinite alternate;
 }
 @keyframes cellWin {
   to {
-    box-shadow: 0 0 22px rgba(94, 234, 212, 0.8);
+    box-shadow: 0 0 22px rgba(234, 177, 63, 0.8);
   }
 }
 .game__status {
@@ -1018,7 +1070,108 @@ a {
   gap: 42px;
   max-width: 1300px;
   margin: 0 auto;
-  align-items: start;
+  align-items: stretch; /* both terminals same height (Sandy 07-16); .term-unit__screen absorbs the extra */
+}
+
+/* reception terminals — workshop 07-16 redesign (Sandy: "dos terminales, mejoradas",
+   dot.play() cue): navy workstation case, paper screen, top strip w/ label + LEDs/tabs,
+   bottom strip w/ power LED. The right unit tabs between CERTS and SKILLS. */
+.term-unit {
+  background: var(--navy);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.term-unit__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 6px;
+  min-height: 34px;
+}
+.term-unit__label {
+  font-family: var(--font-pixel);
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.term-unit__leds {
+  display: flex;
+  gap: 6px;
+}
+.term-unit__leds i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.term-unit__tabs {
+  display: flex;
+  gap: 8px;
+}
+.term-unit__tab {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cream);
+  border: 2px solid rgba(242, 237, 218, 0.35);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.term-unit__tab:hover {
+  border-color: var(--cream);
+}
+.term-unit__tab--on {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+.term-unit__screen {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 26px;
+  flex: 1;
+}
+.term-unit__panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 6px;
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: rgba(242, 237, 218, 0.6);
+}
+.term-unit__power {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 0 10px rgba(255, 123, 107, 0.9);
+}
+.term-unit__status {
+  margin-left: auto;
+}
+.vault__prompt {
+  font-family: var(--font-term);
+  font-size: 17px;
+  letter-spacing: 1px;
+  opacity: 0.65;
+  margin-bottom: 18px;
+}
+.vault__skills {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 .card {
   background: var(--paper);
@@ -1179,15 +1332,23 @@ a {
    ============================================================ */
 
 .analytics {
-  background: linear-gradient(180deg, var(--cream), #e7f5ee);
+  background: var(--greige); /* proposal 19 — Sandy's pick (workshop 07-16) */
 }
 .analytics__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* equal widths (Sandy 07-16; was 1.15/0.85) */
   gap: 42px;
   max-width: 1300px;
   margin: 0 auto;
   align-items: stretch;
+}
+/* the left column is a swap wrapper (calculator ⇄ dashboard) — let its card fill the row height */
+.analytics__grid > div:first-child {
+  display: flex;
+}
+.analytics__grid > div:first-child > * {
+  flex: 1;
+  min-width: 0;
 }
 .calc__row {
   display: grid;
@@ -1215,7 +1376,7 @@ a {
   accent-color: #0d9488;
 }
 .calc__result {
-  background: rgba(94, 234, 212, 0.25);
+  background: rgba(234, 177, 63, 0.25);
   border: 2px solid #0d9488;
   border-radius: 14px;
   padding: 22px 26px;
@@ -1258,7 +1419,7 @@ a {
   font-family: var(--font-term);
   font-size: 20px;
   line-height: 1.5;
-  background: rgba(94, 234, 212, 0.18);
+  background: rgba(234, 177, 63, 0.18);
   border: 2px dashed #0d9488;
   border-radius: 14px;
   padding: 18px 22px;
@@ -1314,7 +1475,7 @@ a {
   gap: 18px;
 }
 .kpi-tile {
-  background: rgba(94, 234, 212, 0.25);
+  background: rgba(234, 177, 63, 0.25);
   border: 2px solid #0d9488;
   border-radius: 14px;
   padding: 18px 20px;
@@ -1442,6 +1603,7 @@ a {
 
 .xp {
   position: relative;
+  background: var(--dustyblue); /* proposal 16 — Sandy's pick (workshop 07-16) */
 }
 .xp__rail {
   position: absolute;
@@ -1495,7 +1657,7 @@ a {
 }
 .xp__card {
   background: var(--navy-2);
-  border: 2px solid rgba(103, 232, 249, 0.35);
+  border: 2px solid rgba(124, 179, 232, 0.35);
   border-radius: 16px;
   padding: 26px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1564,13 +1726,6 @@ a {
    SKILLS
    ============================================================ */
 
-.skills__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 22px 42px;
-  max-width: 1300px;
-  margin: 0 auto;
-}
 .skill {
   padding: 6px 0;
 }
@@ -1630,31 +1785,175 @@ a {
    ============================================================ */
 
 .tv__grid {
+  /* centered stage: TV is the hero, lower-third caption bar below (workshop 07-16 v2) */
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 42px;
-  max-width: 1300px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  max-width: 820px;
   margin: 0 auto;
-  align-items: start;
 }
-.tvset {
-  background: linear-gradient(160deg, #5a3a22, #3a2414);
+
+/* '80s wall unit — workshop 07-16 redesign (Sandy picked option B): wood cabinet with
+   procedural grain wraps the TV, VHS film-archive shelf below tunes the channels. */
+.tvcab {
+  background:
+    repeating-linear-gradient(
+      93deg,
+      rgba(0, 0, 0, 0.10) 0 3px,
+      transparent 3px 9px,
+      rgba(255, 255, 255, 0.025) 9px 12px,
+      transparent 12px 22px
+    ),
+    linear-gradient(160deg, #5a3a22, #3a2414);
   border: 4px solid var(--navy);
   border-radius: 26px;
   padding: clamp(18px, 2.6vw, 34px);
   box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+.tvcab::before,
+.tvcab::after {
+  /* furniture feet */
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  width: 52px;
+  height: 16px;
+  background: var(--navy);
+  border-radius: 0 0 9px 9px;
+}
+.tvcab::before {
+  left: 11%;
+}
+.tvcab::after {
+  right: 11%;
+}
+.tvcab__antenna {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 32px;
+  pointer-events: none;
+}
+.tvcab__antenna i {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 36px;
+  background: var(--navy);
+  border-radius: 2px;
+  transform-origin: bottom center;
+}
+.tvcab__antenna i:first-child {
+  transform: rotate(-28deg);
+}
+.tvcab__antenna i:last-child {
+  transform: rotate(28deg);
+}
+.tvcab__antenna i::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--navy);
+}
+.tvcab__shelf {
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+}
+.tvcab__shelf-label {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  color: rgba(242, 237, 218, 0.6);
+  margin-bottom: 12px;
+}
+.tvcab__tapes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+  gap: 10px;
+}
+.vhs {
+  position: relative;
+  background: linear-gradient(180deg, #241a10, #171009);
+  border: 2px solid #000;
+  border-radius: 8px;
+  padding: 24px 8px 8px;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.vhs::before {
+  /* tape window with the two reels */
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 26%;
+  right: 10%;
+  height: 10px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(240, 234, 214, 0.85) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 85% 50%, rgba(240, 234, 214, 0.85) 0 3px, transparent 3.5px),
+    rgba(255, 255, 255, 0.08);
+}
+.vhs__num {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: rgba(242, 237, 218, 0.55);
+}
+.vhs__label {
+  display: block;
+  background: var(--paper);
+  color: var(--navy);
+  font-family: var(--font-term);
+  font-size: 14px;
+  line-height: 1.15;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  padding: 5px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vhs:hover {
+  transform: translateY(-4px);
+}
+.vhs--in {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(247, 201, 72, 0.55), 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+.vhs--in .vhs__label {
+  background: var(--gold);
+  font-weight: 700;
+}
+.vhs--blank {
+  opacity: 0.8;
+}
+.vhs--blank .vhs__label {
+  background: #8a857a;
+  color: #2c2c2c;
+  font-style: italic;
+}
+
+.tvset {
   display: grid;
   grid-template-columns: 1fr 92px;
   gap: 20px;
   position: relative;
-}
-.tvset__antenna {
-  position: absolute;
-  top: -34px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 34px;
-  color: var(--navy);
 }
 .tvset__brand {
   grid-column: 1 / -1;
@@ -1677,7 +1976,8 @@ a {
 .tvset__screen {
   position: relative;
   background: #060812;
-  border-radius: 12px;
+  border-radius: 16px; /* + curved-glass inset (workshop 07-16) */
+  box-shadow: inset 0 0 46px rgba(0, 0, 0, 0.6);
   aspect-ratio: 16 / 10;
   overflow: hidden;
   display: grid;
@@ -1763,6 +2063,45 @@ a {
   border-radius: 3px;
   background: var(--pink);
 }
+.tvset__knob--vol {
+  width: 40px;
+  height: 40px;
+  transform: rotate(-42deg); /* decorative volume knob (workshop 07-16) */
+}
+.tvset__knob--vol::after {
+  height: 13px;
+  background: var(--gold);
+}
+.tvset__grille {
+  flex: 1;
+  width: 100%;
+  min-height: 56px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5) 0 3px,
+    rgba(255, 255, 255, 0.05) 3px 4px,
+    transparent 4px 7px
+  );
+}
+.tvset__onair {
+  font-family: var(--font-pixel);
+  font-size: 6.5px;
+  letter-spacing: 1px;
+  color: rgba(242, 237, 218, 0.35);
+  border: 2px solid rgba(242, 237, 218, 0.2);
+  border-radius: 6px;
+  padding: 5px 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+.tvset__onair--live {
+  color: var(--navy);
+  background: var(--coral);
+  border-color: #000;
+  box-shadow: 0 0 14px rgba(255, 123, 107, 0.8);
+}
 .tvset__panel-label {
   font-family: var(--font-pixel);
   font-size: 7px;
@@ -1783,89 +2122,88 @@ a {
   box-shadow: none;
 }
 
-.tv__channels {
+/* lower third — broadcast caption bar under the set (workshop 07-16 v2, replaced the guide panel) */
+.tvlower {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 14px 18px 12px;
+  box-shadow: var(--shadow-hard);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
 }
-.tv__channels-label {
-  font-family: var(--font-pixel);
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-  opacity: 0.75;
+.tvlower--off {
+  opacity: 0.55;
 }
-.channel {
+.tvlower__row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  text-align: left;
-  background: var(--paper);
-  border: 2px solid rgba(19, 26, 67, 0.3);
-  border-radius: 14px;
-  padding: 15px 18px;
-  transition: all 0.15s ease;
+  gap: 14px;
+  min-width: 0;
 }
-.channel:hover {
-  border-color: var(--navy);
-  transform: translateX(6px);
-}
-.channel--active {
-  border: 3px solid var(--navy);
-  box-shadow: var(--shadow-hard);
-  background: #fff;
-}
-.channel__num {
+.tvlower__ch {
   font-family: var(--font-pixel);
-  font-size: 11px;
-  width: 40px;
-  height: 40px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--navy);
+  background: var(--gold);
+  padding: 4px 8px;
+  border-radius: 4px;
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 2px solid var(--navy);
-  background: var(--cream);
 }
-.channel--active .channel__num {
-  background: var(--navy);
-  color: var(--gold);
-}
-.channel__title {
+.tvlower__title {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
-.channel__meta {
-  font-family: var(--font-term);
-  font-size: 17px;
-  opacity: 0.7;
-}
-.tv__synopsis {
-  border: 2px dashed var(--navy);
-  border-radius: 14px;
-  padding: 20px 22px;
-  background: rgba(167, 139, 250, 0.12);
-  margin-top: 10px;
-}
-.tv__synopsis-label {
+.tvlower__tapes {
+  margin-left: auto;
   font-family: var(--font-pixel);
-  font-size: 8px;
-  letter-spacing: 2px;
-  color: #7c5cd6;
-  margin-bottom: 10px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  opacity: 0.8;
+  flex-shrink: 0;
 }
-.tv__synopsis-title {
-  font-weight: 700;
-  margin-bottom: 8px;
+.tvlower__tickerwrap {
+  overflow: hidden;
+  border-top: 2px dashed rgba(242, 237, 218, 0.18);
+  padding-top: 8px;
 }
-.tv__synopsis p {
-  font-size: 14px;
-  line-height: 1.7;
+.tvlower__ticker {
+  display: inline-flex;
+  gap: 48px;
+  white-space: nowrap;
+  font-family: var(--font-term);
+  font-size: 18px;
+  color: var(--cyan);
+  animation: tvticker 42s linear infinite;
+  will-change: transform;
 }
-
-@media (max-width: 1000px) {
-  .tv__grid {
-    grid-template-columns: 1fr;
+.tvlower__ticker > span {
+  flex-shrink: 0;
+}
+.tvlower--off .tvlower__ticker {
+  animation-play-state: paused;
+}
+/* two copies + 48px gap: one full copy plus half the gap = seamless loop */
+@keyframes tvticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 24px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tvlower__ticker {
+    animation: none;
+  }
+}
+@media (max-width: 560px) {
+  .tvlower__row {
+    flex-wrap: wrap;
+    row-gap: 6px;
   }
 }
 
@@ -1879,7 +2217,7 @@ a {
   gap: 42px;
   max-width: 1300px;
   margin: 0 auto;
-  align-items: start;
+  align-items: stretch; /* GH card and mail terminal same height (Sandy 07-16) */
 }
 
 .gh__head {
@@ -1999,7 +2337,7 @@ a {
 .mail textarea {
   width: 100%;
   background: var(--ink);
-  border: 2px solid rgba(103, 232, 249, 0.35);
+  border: 2px solid rgba(124, 179, 232, 0.35);
   border-radius: 10px;
   color: var(--cream);
   font-family: var(--font-term);
@@ -2013,7 +2351,7 @@ a {
 .mail input:focus,
 .mail textarea:focus {
   border-color: var(--mint);
-  box-shadow: 0 0 14px rgba(94, 234, 212, 0.25);
+  box-shadow: 0 0 14px rgba(234, 177, 63, 0.25);
 }
 .mail__send {
   width: 100%;
@@ -2035,7 +2373,7 @@ a {
 .mail__stdout {
   background: var(--ink);
   border-radius: 10px;
-  border: 1px solid rgba(103, 232, 249, 0.25);
+  border: 1px solid rgba(124, 179, 232, 0.25);
   font-family: var(--font-term);
   font-size: 16.5px;
   line-height: 1.55;
@@ -2054,8 +2392,8 @@ a {
   font-family: var(--font-term);
   font-size: 16px;
   letter-spacing: 1px;
-  background: rgba(103, 232, 249, 0.12);
-  border: 1px solid rgba(103, 232, 249, 0.4);
+  background: rgba(124, 179, 232, 0.12);
+  border: 1px solid rgba(124, 179, 232, 0.4);
   color: var(--cyan);
   border-radius: 8px;
   padding: 8px 14px;
@@ -2063,7 +2401,7 @@ a {
   transition: background 0.15s ease;
 }
 .mail__shortcut:hover {
-  background: rgba(103, 232, 249, 0.3);
+  background: rgba(124, 179, 232, 0.3);
 }
 
 @media (max-width: 1000px) {
@@ -2077,9 +2415,9 @@ a {
    ============================================================ */
 
 .footer {
-  background: var(--ink);
+  background: var(--sage); /* proposal 08 — same as hero (workshop 07-16) */
   color: var(--cream);
-  border-top: 4px solid var(--gold);
+  /* border-top now lives in the section-dividers rule (rail gradient, workshop 07-16) */
   padding: 48px 5vw 36px;
   display: flex;
   flex-wrap: wrap;
@@ -2219,7 +2557,7 @@ a {
   column-gap: 8px;
   align-items: center;
   background: rgba(27, 35, 88, 0.7);
-  border: 2px solid rgba(94, 234, 212, 0.6);
+  border: 2px solid rgba(234, 177, 63, 0.6);
   border-radius: 12px;
   padding: 5px 12px;
 }
@@ -2259,7 +2597,7 @@ a {
 }
 .pt-tab {
   background: rgba(27, 35, 88, 0.7);
-  border: 2px solid rgba(103, 232, 249, 0.4);
+  border: 2px solid rgba(124, 179, 232, 0.4);
   color: var(--cream);
   border-radius: 12px;
   padding: 10px 20px;
@@ -2332,7 +2670,7 @@ a {
 /* skin customizer */
 .pt-skin {
   background: rgba(27, 35, 88, 0.6);
-  border: 2px solid rgba(103, 232, 249, 0.35);
+  border: 2px solid rgba(124, 179, 232, 0.35);
   border-radius: 14px;
   padding: 14px;
   display: flex;
@@ -2454,7 +2792,7 @@ a {
   aspect-ratio: 1;
   padding: 12px;
   background: rgba(11, 15, 46, 0.7);
-  border: 3px solid rgba(103, 232, 249, 0.4);
+  border: 3px solid rgba(124, 179, 232, 0.4);
   border-radius: 18px;
   position: relative;
 }
@@ -2464,7 +2802,7 @@ a {
 .pt-cell {
   position: relative;
   background: rgba(27, 35, 88, 0.75);
-  border: 2px solid rgba(103, 232, 249, 0.28);
+  border: 2px solid rgba(124, 179, 232, 0.28);
   border-radius: 14%;
   display: grid;
   place-items: center;
@@ -2492,7 +2830,7 @@ a {
   border-color: var(--pink);
 }
 .pt-cell--win {
-  background: rgba(94, 234, 212, 0.25);
+  background: rgba(234, 177, 63, 0.25);
   border-color: var(--mint);
   animation: cellWin 0.5s ease infinite alternate;
 }

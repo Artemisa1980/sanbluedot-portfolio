@@ -3,6 +3,46 @@ import gsap from 'gsap';
 import RubikCube from './RubikCube';
 import { sfx } from '../sound';
 
+/* Pixel-art arcade coin (16×16 grid, classic platformer style — procedural, no assets).
+   . transparent · O outline · G gold · H highlight · S shade · D slot */
+const COIN_SPRITE = [
+  '................',
+  '.....OOOOOO.....',
+  '...OOGGGGGGOO...',
+  '..OGGHHGGGGGGO..',
+  '..OGHHGDDGGGSO..',
+  '.OGHHGGDDGGGGSO.',
+  '.OGHGGGDDGGGGSO.',
+  '.OGHGGGDDGGGGSO.',
+  '.OGHGGGDDGGGGSO.',
+  '.OGHGGGDDGGGGSO.',
+  '.OGHHGGDDGGGGSO.',
+  '..OGHHGDDGGSSO..',
+  '..OGGHHGGGSSSO..',
+  '...OOGGGGSSOO...',
+  '.....OOOOOO.....',
+  '................',
+];
+const COIN_COLORS: Record<string, string> = {
+  O: '#3d2800',
+  G: '#f7c948',
+  H: '#fdeaa8',
+  S: '#d98a2b',
+  D: '#3d2800',
+};
+
+function PixelCoin() {
+  return (
+    <svg width="64" height="64" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
+      {COIN_SPRITE.flatMap((row, y) =>
+        [...row].map((cell, x) =>
+          cell === '.' ? null : <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={COIN_COLORS[cell]} />
+        )
+      )}
+    </svg>
+  );
+}
+
 interface CartridgeLoaderProps {
   /** Headline above the cube. */
   label?: string;
@@ -41,8 +81,8 @@ export default function CartridgeLoader({
     if (withCoin && !reduced) {
       tl.fromTo(
         q('.boot__coin'),
-        { y: -240, rotate: 0, opacity: 0 },
-        { y: 0, rotate: 720, opacity: 1, duration: 0.8, ease: 'bounce.out' }
+        { y: -240, rotationY: 0, opacity: 0 },
+        { y: 0, rotationY: 720, opacity: 1, duration: 0.8, ease: 'bounce.out', transformPerspective: 400 }
       );
     }
     tl.fromTo(q('.boot__title'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4 }, '-=0.2');
@@ -67,7 +107,7 @@ export default function CartridgeLoader({
 
   return (
     <div className="boot crt-fx" ref={rootRef}>
-      {withCoin && !reduced && <div className="boot__coin">🪙</div>}
+      {withCoin && !reduced && <div className="boot__coin"><PixelCoin /></div>}
       <div className="boot__title">{label}</div>
       {!reduced && (
         <>

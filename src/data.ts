@@ -5,11 +5,11 @@ export const PROFILE = {
   title: 'From Starbucks Barista to Retro DeV',
   subtitle: 'UTEL BBA Student & AI Builder Apprentice',
   tagline:
-    "Born in the '80s, tech enthusiast, combining 15 years of customer service & hospitality leadership with active Python and AI Builder learning paths.",
+    "Born in the '80s, tech enthusiast, combining 20+ years of customer service & hospitality leadership with active Python and AI Builder learning paths.",
   location: 'Daule, Ecuador',
-  email: 'sandy_elisa@yahoo.es',
+  email: 'sayma29@gmail.com',
   linkedin: 'https://www.linkedin.com/in/sandy-e-q-30171254',
-  bio: 'I am a passionate hospitality professional who dedicated over 11 years to leading guest experiences at Starbucks, Marriott, and Hilton. Today, I fuse my absolute attention to detail and proactive problem-solving with AI Builder and retro web development. Currently pursuing a Business Administration degree at UTEL and an active AI Builder learning path, I construct interactive systems to demonstrate my growth and analytical capabilities.',
+  bio: 'I am a passionate operations professional who spent 20+ years with U.S. brands — Starbucks, JW Marriott, Hilton, and Holiday Inn — leading guest experiences in high-volume environments. Today, I fuse my absolute attention to detail and proactive problem-solving with AI Builder and retro web development. Currently pursuing a Business Administration & Finance degree at UTEL and an active AI Builder learning path, I construct interactive systems to demonstrate my growth and analytical capabilities.',
   quote: 'Hospitality teaches operational empathy, while code breeds structured logic.',
   languages: [
     { name: 'Spanish', level: 'Native / Bilingual' },
@@ -83,10 +83,10 @@ export const EXPERIENCE: ExperienceItem[] = [
   {
     id: 'starbucks',
     company: 'Starbucks',
-    role: 'Senior Barista & Trainer',
+    role: 'Barista',
     period: 'Sep 2013 — Jun 2025',
     duration: '11 yrs 10 mos',
-    location: 'United States',
+    location: 'Miami, FL, USA',
     icon: '☕️',
     bullets: [
       'Crafted premium specialty beverages with high consistency in fast-paced, high-volume retail environments.',
@@ -104,7 +104,7 @@ export const EXPERIENCE: ExperienceItem[] = [
     location: 'Miami, FL, USA',
     icon: '🏨',
     bullets: [
-      'Supervised the morning hospitality team to ensure adherence to JW Marriott five-star luxury expectations.',
+      'Supervised a morning housekeeping team of 8–10 room attendants to JW Marriott five-star luxury expectations, leading dedicated 6–8 person crews for VIP room turnovers.',
       'Coordinated directly with front desk management and maintenance to respond instantly to guest issues.',
       'Delivered brand orientation and structured safety training schedules for all new team members.',
     ],
@@ -112,7 +112,7 @@ export const EXPERIENCE: ExperienceItem[] = [
   {
     id: 'hilton',
     company: 'Hilton Worldwide',
-    role: 'Night Audit Specialist',
+    role: 'Night Auditor',
     period: 'Feb 2008 — Apr 2010',
     duration: '2 yrs 3 mos',
     location: 'Ocean City, MD, USA',
@@ -133,6 +133,19 @@ export const EXPERIENCE: ExperienceItem[] = [
     bullets: [
       'Delivered fast, high-quality beverage service in a high-traffic Manhattan gourmet café environment.',
       'Audited registers, processed complex cash & card transactions, and supported team layout shifts.',
+    ],
+  },
+  {
+    id: 'holiday-inn',
+    company: 'Holiday Inn Hotel & Suites',
+    role: 'Room Service & Housekeeping',
+    period: 'Oct 2003 — 2007',
+    duration: '~4 yrs',
+    location: 'Ocean City, MD, USA',
+    icon: '🛎️',
+    bullets: [
+      'First role with a U.S. hospitality brand — ran room service and housekeeping operations to brand standards.',
+      'The starting point of 20+ years of continuous U.S. customer-service experience.',
     ],
   },
 ];
@@ -177,6 +190,8 @@ export interface TVChannel {
   length: string;
   icon: string;
   synopsis: string;
+  /** Short label printed on the VHS cassette sticker in the film-archive shelf. */
+  tape: string;
   /** Optional video URL/file. When set, it plays inside the CRT; otherwise the program card shows. */
   videoSrc?: string;
 }
@@ -190,6 +205,7 @@ export const TV_CHANNELS: TVChannel[] = [
     icon: '🤖',
     synopsis:
       'A wordless retro-futurist short for the published research. One small salvager robot, DOT, wanders mountains of discarded humanoids and recovers the single rare-earth magnet the world fought to mine — the one we throw away. We made the trash, and the salvager too.',
+    tape: 'AI ROBOT RACE',
     // videoSrc: 'https://…'  // ← drop the finished video URL/file here to play it in the CRT
   },
   {
@@ -199,6 +215,7 @@ export const TV_CHANNELS: TVChannel[] = [
     length: '—',
     icon: '📡',
     synopsis: 'A new transmission is being recorded. Stay tuned.',
+    tape: 'BLANK TAPE',
   },
   {
     id: 3,
@@ -207,6 +224,7 @@ export const TV_CHANNELS: TVChannel[] = [
     length: '—',
     icon: '📡',
     synopsis: 'A new transmission is being recorded. Stay tuned.',
+    tape: 'BLANK TAPE',
   },
   {
     id: 4,
@@ -215,14 +233,17 @@ export const TV_CHANNELS: TVChannel[] = [
     length: '—',
     icon: '📡',
     synopsis: 'A new transmission is being recorded. Stay tuned.',
+    tape: 'BLANK TAPE',
   },
 ];
 
+// short one-line messages on purpose (Sandy 07-16): the console must not wrap,
+// so the GH card and the mail terminal close at the same height
 export const COMMITS = [
-  { date: '2025-08-10 14:32:01', hash: 'commit-8a1bf2', msg: "docs: initialize Sandy's interactive system portfolio" },
-  { date: '2025-08-15 09:15:33', hash: 'commit-4e9d7c', msg: 'feat: initialize UTEL Universidad Business Administration degree track' },
-  { date: '2025-11-20 18:22:11', hash: 'commit-3c5f2b', msg: 'study: initialize IBM Full Stack Developer Certificate path' },
-  { date: '2026-02-22 11:05:40', hash: 'commit-7d4e3a', msg: 'feat: complete Google Prompting Essentials Specialization' },
-  { date: '2026-05-24 16:40:00', hash: 'commit-9b2c1d', msg: 'feat: establish Git workspace and configure 4-slot Arcade cabinet' },
-  { date: '2026-06-11 10:08:27', hash: 'commit-e5a8f0', msg: 'feat: ship Retro Dev-Station v2.0 with GSAP + Three.js engine' },
+  { date: '2025-08-10 14:32:01', hash: 'commit-8a1bf2', msg: 'docs: init retro portfolio' },
+  { date: '2025-08-15 09:15:33', hash: 'commit-4e9d7c', msg: 'feat: start UTEL BBA track' },
+  { date: '2025-11-20 18:22:11', hash: 'commit-3c5f2b', msg: 'study: IBM Full Stack path' },
+  { date: '2026-02-22 11:05:40', hash: 'commit-7d4e3a', msg: 'feat: Google Prompting cert' },
+  { date: '2026-05-24 16:40:00', hash: 'commit-9b2c1d', msg: 'feat: git + arcade cabinet' },
+  { date: '2026-06-11 10:08:27', hash: 'commit-e5a8f0', msg: 'feat: ship Dev-Station v2.0' },
 ];

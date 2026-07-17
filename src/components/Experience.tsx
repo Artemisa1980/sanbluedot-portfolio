@@ -45,7 +45,7 @@ export default function Experience() {
           📼 CAREER TIMELINE // SAVE FILES
         </div>
         <h2 className="section-title" style={{ color: 'var(--cream)', marginBottom: 64 }}>
-          15 YEARS OF <span style={{ color: 'var(--gold)' }}>XP POINTS</span>
+          20+ YEARS OF <span style={{ color: 'var(--gold)' }}>XP POINTS</span>
         </h2>
       </div>
 

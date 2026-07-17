@@ -52,7 +52,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="preloader crt-fx" ref={rootRef}>
-      <SanblueBadge className="preloader__logo" />
+      <SanblueBadge className="preloader__logo" variant="sage" />
       <div className="preloader__lines" ref={linesRef} />
       <div className="preloader__bar">
         <div className="preloader__bar-fill" ref={barRef} />

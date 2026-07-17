@@ -8,7 +8,6 @@ import Arcade from './components/Arcade';
 import About from './components/About';
 import Analytics from './components/Analytics';
 import Experience from './components/Experience';
-import Skills from './components/Skills';
 import TVStudio from './components/TVStudio';
 import SystemRoom from './components/SystemRoom';
 import Footer from './components/Footer';
@@ -71,7 +70,6 @@ export default function App() {
         <About />
         <Experience />
         <Analytics />
-        <Skills />
         <TVStudio />
         <SystemRoom />
       </main>

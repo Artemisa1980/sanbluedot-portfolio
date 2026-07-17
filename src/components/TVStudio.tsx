@@ -1,3 +1,4 @@
+// src/components/TVStudio.tsx
 import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,11 +12,13 @@ export default function TVStudio() {
   const noiseRef = useRef<HTMLCanvasElement>(null);
   const knobRef = useRef<HTMLDivElement>(null);
   const programRef = useRef<HTMLDivElement>(null);
+  const lowerRef = useRef<HTMLDivElement>(null);
   const [channel, setChannel] = useState(0);
   const [power, setPower] = useState(true);
   const [staticBurst, setStaticBurst] = useState(false);
 
   const active = TV_CHANNELS[channel];
+  const ticker = `${active.genre} • ${active.length} ··· ${active.synopsis} ··· 📼 Insert a cassette from the film archive to change the channel.`;
 
   // CRT static noise
   useEffect(() => {
@@ -52,7 +55,7 @@ export default function TVStudio() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        '.tvset',
+        '.tvcab',
         { y: 90, opacity: 0, rotate: -2 },
         {
           y: 0,
@@ -64,15 +67,28 @@ export default function TVStudio() {
         }
       );
       gsap.fromTo(
-        '.channel',
-        { x: 70, opacity: 0 },
+        '.vhs',
+        { y: 26, opacity: 0, scale: 0.7 },
         {
-          x: 0,
+          y: 0,
           opacity: 1,
-          duration: 0.5,
-          stagger: 0.1,
+          scale: 1,
+          duration: 0.45,
+          stagger: 0.08,
+          ease: 'back.out(2)',
+          scrollTrigger: { trigger: '.tvcab__shelf', start: 'top 88%' },
+        }
+      );
+      gsap.fromTo(
+        '.tvlower',
+        { y: 26, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
           ease: 'power2.out',
-          scrollTrigger: { trigger: '.tv__channels', start: 'top 80%' },
+          clearProps: 'opacity', /* .tvlower--off dims via class opacity */
+          scrollTrigger: { trigger: '.tv__grid', start: 'top 78%' },
         }
       );
     }, rootRef);
@@ -85,6 +101,9 @@ export default function TVStudio() {
     gsap.to(knobRef.current, { rotate: i * 90, duration: 0.45, ease: 'back.out(2)' });
     if (programRef.current) {
       gsap.fromTo(programRef.current, { opacity: 0, scaleY: 0.05 }, { opacity: 1, scaleY: 1, duration: 0.4, delay: 0.25 });
+    }
+    if (lowerRef.current) {
+      gsap.fromTo(lowerRef.current, { opacity: 0.15 }, { opacity: 1, duration: 0.45, delay: 0.25, clearProps: 'opacity' });
     }
     setTimeout(() => {
       setChannel(i);
@@ -122,67 +141,87 @@ export default function TVStudio() {
       </div>
 
       <div className="tv__grid">
-        <div className="tvset">
-          <span className="tvset__antenna">⋁</span>
-          <div className="tvset__brand">📺 SANDY CINE-VISION 16:9 ✨</div>
-          <div className="tvset__screen-wrap">
-            <div className="tvset__screen">
-              <canvas className="tvset__noise" ref={noiseRef} />
-              {power && (active.videoSrc ? (
-                <video
-                  className="tvset__video"
-                  src={active.videoSrc}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  controls
-                />
-              ) : (
-                <div className="tvset__program" ref={programRef}>
-                  <span className="tvset__prog-icon">{active.icon}</span>
-                  <div className="tvset__prog-title">CH_{String(active.id).padStart(2, '0')} ▸ {active.title}</div>
-                  <div className="tvset__prog-meta">{active.genre} • {active.length}</div>
-                </div>
-              ))}
-              {!power && <div className="tvset__off">⏻ CINE_OFF — PRESS POWER</div>}
+        {/* '80s living-room wall unit: wood cabinet + TV + VHS film archive */}
+        <div className="tvcab">
+          <span className="tvcab__antenna" aria-hidden="true"><i /><i /></span>
+
+          <div className="tvset">
+            <div className="tvset__brand">📺 SANDY CINE-VISION 16:9 ✨</div>
+            <div className="tvset__screen-wrap">
+              <div className="tvset__screen">
+                <canvas className="tvset__noise" ref={noiseRef} />
+                {power && (active.videoSrc ? (
+                  <video
+                    className="tvset__video"
+                    src={active.videoSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                  />
+                ) : (
+                  <div className="tvset__program" ref={programRef}>
+                    <span className="tvset__prog-icon">{active.icon}</span>
+                    <div className="tvset__prog-title">CH_{String(active.id).padStart(2, '0')} ▸ {active.title}</div>
+                    <div className="tvset__prog-meta">{active.genre} • {active.length}</div>
+                  </div>
+                ))}
+                {!power && <div className="tvset__off">⏻ CINE_OFF — PRESS POWER</div>}
+              </div>
+            </div>
+            <div className="tvset__panel">
+              <span className={`tvset__onair ${power && active.videoSrc ? 'tvset__onair--live' : ''}`}>
+                ON AIR
+              </span>
+              <span className="tvset__panel-label">CHANNEL</span>
+              <div className="tvset__knob" ref={knobRef} />
+              <span className="tvset__panel-label">CH SELECT</span>
+              <div className="tvset__knob tvset__knob--vol" />
+              <span className="tvset__panel-label">VOLUME</span>
+              <div className="tvset__grille" />
+              <span className="tvset__panel-label">POWER<br />CINE_ON</span>
+              <button
+                className={`tvset__power ${power ? '' : 'tvset__power--off'}`}
+                onClick={togglePower}
+                aria-label="TV power"
+              />
             </div>
           </div>
-          <div className="tvset__panel">
-            <span className="tvset__panel-label">CHANNEL</span>
-            <div className="tvset__knob" ref={knobRef} />
-            <span className="tvset__panel-label">CH SELECT</span>
-            <div style={{ flex: 1 }} />
-            <span className="tvset__panel-label">POWER<br />CINE_ON</span>
-            <button
-              className={`tvset__power ${power ? '' : 'tvset__power--off'}`}
-              onClick={togglePower}
-              aria-label="TV power"
-            />
+
+          <div className="tvcab__shelf">
+            <div className="tvcab__shelf-label">📼 FILM ARCHIVE // INSERT A TAPE TO TUNE</div>
+            <div className="tvcab__tapes">
+              {TV_CHANNELS.map((ch, i) => (
+                <button
+                  key={ch.id}
+                  className={`vhs ${i === channel ? 'vhs--in' : ''} ${ch.tape === 'BLANK TAPE' ? 'vhs--blank' : ''}`}
+                  onClick={() => tune(i)}
+                  onMouseEnter={() => sfx.hover()}
+                  aria-label={`Tune to channel ${ch.id}: ${ch.title}`}
+                  aria-pressed={i === channel}
+                >
+                  <span className="vhs__num">{String(ch.id).padStart(2, '0')}</span>
+                  <span className="vhs__label">{ch.tape}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="tv__channels">
-          <div className="tv__channels-label">📡 SELECT TRANSMISSION CHANNEL</div>
-          {TV_CHANNELS.map((ch, i) => (
-            <button
-              key={ch.id}
-              className={`channel ${i === channel ? 'channel--active' : ''}`}
-              onClick={() => tune(i)}
-              onMouseEnter={() => sfx.hover()}
-            >
-              <span className="channel__num">{String(ch.id).padStart(2, '0')}</span>
-              <span>
-                <span className="channel__title">{ch.icon} {ch.title}</span>
-                <br />
-                <span className="channel__meta">{ch.genre} • Length: {ch.length}</span>
-              </span>
-            </button>
-          ))}
-          <div className="tv__synopsis">
-            <div className="tv__synopsis-label">✨ CHANNEL SYNOPSIS</div>
-            <div className="tv__synopsis-title">{active.icon} {active.title}</div>
-            <p>{active.synopsis}</p>
+        {/* lower third — broadcast caption bar under the set (the old guide panel, compressed) */}
+        <div className={`tvlower ${power ? '' : 'tvlower--off'}`} ref={lowerRef}>
+          <div className="tvlower__row">
+            <span className="tvlower__ch">CH_{String(active.id).padStart(2, '0')}</span>
+            <span className="tvlower__title">{active.icon} {active.title}</span>
+            <span className="tvlower__tapes">{TV_CHANNELS.length} TAPES ARCHIVED</span>
+          </div>
+          <div className="tvlower__tickerwrap">
+            {/* two copies scroll seamlessly; key restarts the loop on retune */}
+            <div className="tvlower__ticker" key={channel}>
+              <span>{ticker}</span>
+              <span aria-hidden="true">{ticker}</span>
+            </div>
           </div>
         </div>
       </div>

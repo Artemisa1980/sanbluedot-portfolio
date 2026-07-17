@@ -139,14 +139,14 @@ export default function FinancialDashboard({ log, onBack }: FinancialDashboardPr
               y={b.y}
               width={b.barW}
               height={b.h}
-              fill={i === 0 ? '#f7c948' : '#5eead4'}
+              fill={i === 0 ? '#f7c948' : '#eab13f'}
               rx={4}
             />
             <text
               ref={(el) => { valueRefs.current[i] = el; }}
               x={b.x + b.barW / 2}
               y={b.y - 8}
-              fill="#67e8f9"
+              fill="#7cb3e8"
               fontSize="13"
               fontFamily="VT323"
               textAnchor="middle"
@@ -156,7 +156,7 @@ export default function FinancialDashboard({ log, onBack }: FinancialDashboardPr
             <text
               x={b.x + b.barW / 2}
               y={chart.H - 8}
-              fill="#67e8f9"
+              fill="#7cb3e8"
               fontSize="11"
               fontFamily="VT323"
               textAnchor="middle"

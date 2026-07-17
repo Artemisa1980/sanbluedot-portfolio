@@ -7,7 +7,7 @@ import { sfx } from '../sound';
 const TYPE_PHRASES = [
   'From Starbucks Barista to Retro DeV_',
   'UTEL BBA Student & AI Builder Apprentice_',
-  '15 yrs hospitality × AI Builder_',
+  '20+ yrs hospitality × AI Builder_',
   'Press START to explore_',
 ];
 
@@ -27,7 +27,7 @@ export default function Hero({ booted }: { booted: boolean }) {
       y: Math.random(),
       s: Math.random() * 2.4 + 0.8,
       v: Math.random() * 0.0006 + 0.0001,
-      c: ['#f7c948', '#ff6ea9', '#67e8f9', '#5eead4', '#a78bfa', '#f2edda'][
+      c: ['#f7c948', '#ff6ea9', '#7cb3e8', '#eab13f', '#a78bfa', '#f2edda'][
         Math.floor(Math.random() * 6)
       ],
       tw: Math.random() * Math.PI * 2,

@@ -38,23 +38,23 @@ interface TileInfo {
 
 /* '80s-inspired filler cartridges that wrap the rest of the sphere */
 const FILLERS: CardDesign[] = [
-  { brand: 'RETRO-VAULT', title: 'SPACE INVADERZ', emoji: '👾', accent: '#67e8f9', art: 'stars', year: '1981', tags: ['ARCADE', '8-BIT'] },
+  { brand: 'RETRO-VAULT', title: 'SPACE INVADERZ', emoji: '👾', accent: '#7cb3e8', art: 'stars', year: '1981', tags: ['ARCADE', '8-BIT'] },
   { brand: 'RETRO-VAULT', title: 'MUSHROOM KINGDOM', emoji: '🍄', accent: '#ff7b6b', art: 'grid', year: '1985', tags: ['PLATFORM'] },
   { brand: 'RETRO-VAULT', title: 'GHOST MAZE', emoji: '👻', accent: '#a78bfa', art: 'maze', year: '1980', tags: ['MAZE', 'CLASSIC'] },
   { brand: 'RETRO-VAULT', title: 'PIXEL GALAXY', emoji: '🌌', accent: '#f7c948', art: 'stars', year: '1983', tags: ['SHOOTER'] },
-  { brand: 'RETRO-VAULT', title: 'ALIEN AMBUSH', emoji: '👽', accent: '#5eead4', art: 'stars', year: '1982', tags: ['INVASION'] },
+  { brand: 'RETRO-VAULT', title: 'ALIEN AMBUSH', emoji: '👽', accent: '#eab13f', art: 'stars', year: '1982', tags: ['INVASION'] },
   { brand: 'RETRO-VAULT', title: 'CHERRY BONUS', emoji: '🍒', accent: '#ff6ea9', art: 'plain', year: '1980', tags: ['+500 PTS'] },
   { brand: 'RETRO-VAULT', title: 'HIGH SCORE', emoji: '⭐', accent: '#f7c948', art: 'grid', year: '1984', tags: ['RANK #1'] },
   { brand: 'RETRO-VAULT', title: 'TURBO RACER', emoji: '🏎️', accent: '#ff7b6b', art: 'grid', year: '1987', tags: ['RACING'] },
-  { brand: 'RETRO-VAULT', title: 'DRAGON CASTLE', emoji: '🐉', accent: '#5eead4', art: 'maze', year: '1983', tags: ['QUEST'] },
+  { brand: 'RETRO-VAULT', title: 'DRAGON CASTLE', emoji: '🐉', accent: '#eab13f', art: 'maze', year: '1983', tags: ['QUEST'] },
   { brand: 'RETRO-VAULT', title: 'EXTRA LIFE', emoji: '❤️', accent: '#ff6ea9', art: 'plain', year: '1985', tags: ['1-UP'] },
   { brand: 'RETRO-VAULT', title: 'CASSETTE LOADER', emoji: '📼', accent: '#a78bfa', art: 'plain', year: '1987', tags: ['SIDE A'] },
-  { brand: 'RETRO-VAULT', title: 'FLOPPY SAVE', emoji: '💾', accent: '#67e8f9', art: 'plain', year: '1986', tags: ['1.44 MB'] },
+  { brand: 'RETRO-VAULT', title: 'FLOPPY SAVE', emoji: '💾', accent: '#7cb3e8', art: 'plain', year: '1986', tags: ['1.44 MB'] },
   { brand: 'RETRO-VAULT', title: 'SYNTH SUNSET', emoji: '🌴', accent: '#ff6ea9', art: 'grid', year: '1984', tags: ['OUTRUN'] },
-  { brand: 'RETRO-VAULT', title: 'UFO CHASE', emoji: '🛸', accent: '#5eead4', art: 'stars', year: '1982', tags: ['BONUS'] },
+  { brand: 'RETRO-VAULT', title: 'UFO CHASE', emoji: '🛸', accent: '#eab13f', art: 'stars', year: '1982', tags: ['BONUS'] },
 ];
 
-const GAME_ACCENTS = ['#f7c948', '#ff6ea9', '#67e8f9', '#5eead4', '#a78bfa', '#ff7b6b'];
+const GAME_ACCENTS = ['#f7c948', '#ff6ea9', '#7cb3e8', '#eab13f', '#a78bfa', '#ff7b6b'];
 
 /* ---------- canvas card painting ---------- */
 
@@ -235,7 +235,7 @@ function drawCard(design: CardDesign): HTMLCanvasElement {
     const ready = design.badge === 'READY';
     ctx.font = '11px "Press Start 2P", monospace';
     const tw = ctx.measureText(design.badge).width;
-    ctx.fillStyle = ready ? '#5eead4' : 'rgba(242,237,218,0.22)';
+    ctx.fillStyle = ready ? '#eab13f' : 'rgba(242,237,218,0.22)';
     ctx.beginPath();
     ctx.roundRect(ax + 10, ay + 10, tw + 26, 32, 8);
     ctx.fill();

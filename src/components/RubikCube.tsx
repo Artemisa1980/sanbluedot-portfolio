@@ -11,9 +11,9 @@ import { sfx } from '../sound';
 const FACE_COLORS = {
   px: 0xf7c948, // gold
   nx: 0xff6ea9, // pink
-  py: 0x5eead4, // mint
+  py: 0x6fd48a, // soft green — pastel weight matched to the other faces (Sandy 07-16; fixes the double-yellow after the mint→amber swap)
   ny: 0xa78bfa, // purple
-  pz: 0x67e8f9, // cyan
+  pz: 0x7cb3e8, // dot blue (was cyan)
   nz: 0xff7b6b, // coral
   inner: 0x131a43, // navy
 };
@@ -58,7 +58,7 @@ export default function RubikCube({ className, frantic = false }: Props) {
     const key = new THREE.DirectionalLight(0xffffff, 1.6);
     key.position.set(5, 8, 6);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0x67e8f9, 0.8);
+    const rim = new THREE.DirectionalLight(0x7cb3e8, 0.8);
     rim.position.set(-6, -3, -5);
     scene.add(rim);
 

@@ -6,9 +6,16 @@ type Props = {
   className?: string;
   /** Arcade coin-flip on hover/tap with coin sfx. */
   interactive?: boolean;
+  /** Disc tint: original navy (header + favicon) or sage (preloader). */
+  variant?: 'navy' | 'sage';
 };
 
-export default function SanblueBadge({ className, interactive = false }: Props) {
+const BADGE_SRC = {
+  navy: '/sanblue-badge.png',
+  sage: '/sanblue-badge-sage.png',
+} as const;
+
+export default function SanblueBadge({ className, interactive = false, variant = 'navy' }: Props) {
   const ref = useRef<HTMLImageElement>(null);
 
   const coinSpin = () => {
@@ -25,7 +32,7 @@ export default function SanblueBadge({ className, interactive = false }: Props) 
   return (
     <img
       ref={ref}
-      src="/sanblue-badge.png"
+      src={BADGE_SRC[variant]}
       alt="sanbluedot badge"
       className={className}
       draggable={false}
