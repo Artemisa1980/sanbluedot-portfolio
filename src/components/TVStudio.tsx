@@ -16,6 +16,7 @@ export default function TVStudio() {
   const [channel, setChannel] = useState(0);
   const [power, setPower] = useState(true);
   const [staticBurst, setStaticBurst] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
 
   const active = TV_CHANNELS[channel];
   const ticker = `${active.genre} • ${active.length} ··· ${active.synopsis} ··· 📼 Insert a cassette from the film archive to change the channel.`;
@@ -108,6 +109,7 @@ export default function TVStudio() {
     setTimeout(() => {
       setChannel(i);
       setStaticBurst(false);
+      setVideoPlaying(false); /* the <video> unmounts on retune — onPause never fires */
     }, 260);
   }, []);
 
@@ -131,12 +133,15 @@ export default function TVStudio() {
 
   function togglePower() {
     sfx.click();
-    setPower((p) => !p);
+    setPower((p) => {
+      if (p) setVideoPlaying(false); /* video unmounts when switching off */
+      return !p;
+    });
   }
 
   return (
     <section className="section" id="tv" ref={rootRef}>
-      <div className="section-tag" style={{ background: 'var(--purple)' }}>
+      <div className="section-tag" style={{ background: 'var(--sage)' }}>
         🎬 TV BROADCASTING STUDIO 🎬
       </div>
 
@@ -151,14 +156,16 @@ export default function TVStudio() {
               <div className="tvset__screen">
                 <canvas className="tvset__noise" ref={noiseRef} />
                 {power && (active.videoSrc ? (
+                  /* click-to-play (Sandy 07-17): no autoplay, so audio is allowed on user gesture */
                   <video
                     className="tvset__video"
                     src={active.videoSrc}
-                    autoPlay
-                    muted
                     loop
                     playsInline
                     controls
+                    preload="metadata"
+                    onPlay={() => setVideoPlaying(true)}
+                    onPause={() => setVideoPlaying(false)}
                   />
                 ) : (
                   <div className="tvset__program" ref={programRef}>
@@ -171,7 +178,7 @@ export default function TVStudio() {
               </div>
             </div>
             <div className="tvset__panel">
-              <span className={`tvset__onair ${power && active.videoSrc ? 'tvset__onair--live' : ''}`}>
+              <span className={`tvset__onair ${power && videoPlaying ? 'tvset__onair--live' : ''}`}>
                 ON AIR
               </span>
               <span className="tvset__panel-label">CHANNEL</span>

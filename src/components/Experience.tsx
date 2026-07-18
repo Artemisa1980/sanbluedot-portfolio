@@ -41,7 +41,7 @@ export default function Experience() {
   return (
     <section className="section crt crt-fx xp" id="experience" ref={rootRef}>
       <div style={{ textAlign: 'center' }}>
-        <div className="section-tag" style={{ background: 'var(--cyan)' }}>
+        <div className="section-tag" style={{ background: 'var(--amber)' }}>
           📼 CAREER TIMELINE // SAVE FILES
         </div>
         <h2 className="section-title" style={{ color: 'var(--cream)', marginBottom: 64 }}>

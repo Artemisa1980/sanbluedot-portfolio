@@ -4,10 +4,10 @@ import SanblueBadge from './SanblueBadge';
 
 const BOOT_LINES = [
   'SANDY_OS v2.0 // BIOS CHECK ............ <span class="ok">OK</span>',
-  'LOADING HOSPITALITY.DLL (15 YRS) ....... <span class="ok">OK</span>',
+  'LOADING HOSPITALITY.DLL (20+ YRS) ...... <span class="ok">OK</span>',
   'MOUNTING AI_BUILDER.SYS ................ <span class="ok">OK</span>',
   'CALIBRATING CRT PHOSPHORS .............. <span class="ok">OK</span>',
-  'INSERT COIN TO CONTINUE ▸',
+  '<span class="ok">INSERT COIN TO CONTINUE ▸</span>',
 ];
 
 export default function Preloader({ onDone }: { onDone: () => void }) {

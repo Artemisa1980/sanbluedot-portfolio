@@ -37,7 +37,7 @@ export default function Arcade() {
   return (
     <section className="section crt crt-fx" id="arcade" ref={rootRef}>
       <div className="arcade__head">
-        <div className="section-tag" style={{ background: 'var(--gold)' }}>
+        <div className="section-tag" style={{ background: 'var(--mintsoft)' }}>
           🕹️ ARCADE STATION 🕹️
         </div>
         <h2 className="section-title" style={{ color: 'var(--cream)' }}>

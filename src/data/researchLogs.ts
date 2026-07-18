@@ -21,7 +21,7 @@ export const researchLogs: ResearchLog[] = [
     legend:
       'A 10-year outlook on the US–China humanoid race — and what getting them built costs us later.',
     status: 'live',
-    studioChannelId: 1,
+    studioChannelId: 2, /* intro film took CH_01 (07-17) */
     links: {
       html: 'https://artemisa1980.github.io/ai-robot-race/',
       pdf: 'https://artemisa1980.github.io/ai-robot-race/The-AI-Robot-Race-and-Its-Hidden-Cost.pdf',

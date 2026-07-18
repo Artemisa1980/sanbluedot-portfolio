@@ -8,7 +8,7 @@ export const PROFILE = {
     "Born in the '80s, tech enthusiast, combining 20+ years of customer service & hospitality leadership with active Python and AI Builder learning paths.",
   location: 'Daule, Ecuador',
   email: 'sayma29@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/sandy-e-q-30171254',
+  linkedin: 'https://www.linkedin.com/in/sandy-eq-30171254',
   bio: 'I am a passionate operations professional who spent 20+ years with U.S. brands — Starbucks, JW Marriott, Hilton, and Holiday Inn — leading guest experiences in high-volume environments. Today, I fuse my absolute attention to detail and proactive problem-solving with AI Builder and retro web development. Currently pursuing a Business Administration & Finance degree at UTEL and an active AI Builder learning path, I construct interactive systems to demonstrate my growth and analytical capabilities.',
   quote: 'Hospitality teaches operational empathy, while code breeds structured logic.',
   languages: [
@@ -199,6 +199,17 @@ export interface TVChannel {
 export const TV_CHANNELS: TVChannel[] = [
   {
     id: 1,
+    title: 'sanblueᵈᵒᵗ Station Intro — Cat-Bot',
+    genre: 'Brand Short · sanblueᵈᵒᵗ',
+    length: '~0:21 min',
+    icon: '🐱',
+    synopsis:
+      'The station mascot takes the screen: Cat-Bot boots up the sanblueᵈᵒᵗ retro dev-station and rolls the opening transmission. First tape in the archive — more films are on the way.',
+    tape: 'CAT-BOT INTRO',
+    videoSrc: '/videos/cat-bot-intro.mp4',
+  },
+  {
+    id: 2,
     title: 'The AI Robot Race and Its Hidden Cost',
     genre: 'Research Film · sanblueᵈᵒᵗ',
     length: '~1:30 min',
@@ -206,16 +217,7 @@ export const TV_CHANNELS: TVChannel[] = [
     synopsis:
       'A wordless retro-futurist short for the published research. One small salvager robot, DOT, wanders mountains of discarded humanoids and recovers the single rare-earth magnet the world fought to mine — the one we throw away. We made the trash, and the salvager too.',
     tape: 'AI ROBOT RACE',
-    // videoSrc: 'https://…'  // ← drop the finished video URL/file here to play it in the CRT
-  },
-  {
-    id: 2,
-    title: 'Coming Soon',
-    genre: 'Transmission Pending',
-    length: '—',
-    icon: '📡',
-    synopsis: 'A new transmission is being recorded. Stay tuned.',
-    tape: 'BLANK TAPE',
+    // videoSrc: 'https://…'  // ← drop the finished research video URL/file here to play it in the CRT
   },
   {
     id: 3,

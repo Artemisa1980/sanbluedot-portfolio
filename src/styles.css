@@ -10,7 +10,7 @@
   --ink: #0b0f2e;
   --cream: #f2edda;
   --paper: #fbf7ea;
-  --gold: #f7c948;
+  --gold: #efc15e; /* CANON YELLOW (Sandy 07-17): brand gold = the sanblue(dot) wordmark tone (was #f7c948) */
   --pink: #ff6ea9;
   --mint: #eab13f;
   --cyan: #7cb3e8;
@@ -26,6 +26,17 @@
   --greige: #b5ab9f;
   --sagelight: #d8e0c4;
   --clay: #a87f76;
+  /* tags pass 2026-07-17 — Sandy's verdict (T-05, navy ink): per-section pill fills */
+  --amber: #eab13f;    /* NOTE: --mint also holds this value since the 06-xx mint→amber shift */
+  --mintsoft: #a9d3c0; /* true mint for tags (--mint name is taken by the amber shift) */
+  /* reception desk scene 2026-07-17 (Sandy's Andor verdict — slate case, amber-monochrome ink) */
+  --slatecase: #6d7e92;
+  --slatedark: #5c6b7d;
+  --olive: #34301f;
+  --amberdeep: #d98a2b;
+  --khaki: #a49e85;
+  --wood: #3e2f23;
+  --wood-2: #4a3628;
 
   --font-pixel: 'Press Start 2P', monospace;
   --font-term: 'VT323', monospace;
@@ -100,6 +111,7 @@ a {
   box-shadow: var(--shadow-hard);
   background: var(--paper);
   text-transform: uppercase;
+  color: var(--navy); /* tags pass 07-17 (T-05 verdict): navy ink on every pill */
 }
 
 .section-title {
@@ -235,7 +247,7 @@ a {
   inset: 0;
   z-index: 1000;
   background: var(--dustyblue); /* Sandy's favorite blue — boot screen (workshop 07-16) */
-  color: var(--mint);
+  color: var(--paper); /* preloader V3 verdict 07-17: paper log, gold only on accents */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -253,7 +265,7 @@ a {
   line-height: 1.5;
   min-height: 132px;
   width: min(560px, 86vw);
-  color: var(--mint);
+  color: var(--paper); /* preloader V3 verdict 07-17 */
 }
 .preloader__lines .ok {
   color: var(--gold);
@@ -302,16 +314,36 @@ a {
   background: rgba(242, 237, 218, 0.92);
   backdrop-filter: blur(8px);
   border-bottom: 3px solid var(--navy);
-  transition: padding 0.25s ease;
+  transition: padding 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
+/* pro compact-on-scroll: one slim line, floatier glass (Sandy 07-17) */
 .header--shrunk {
-  padding: 8px 4vw;
+  padding: 7px 4vw;
+  background: rgba(242, 237, 218, 0.85);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 18px rgba(19, 26, 67, 0.14);
 }
 .header__logo {
   width: 48px;
   height: 48px;
   display: block;
   flex-shrink: 0;
+  transition: width 0.25s ease, height 0.25s ease;
+}
+.header--shrunk .header__logo {
+  width: 36px;
+  height: 36px;
+}
+.header__sub,
+.header__brand {
+  max-height: 40px;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+.header--shrunk .header__sub,
+.header--shrunk .header__brand {
+  max-height: 0;
+  opacity: 0;
 }
 .header__id {
   display: flex;
@@ -420,10 +452,13 @@ a {
   font-family: var(--font-term);
   font-size: 22px;
   letter-spacing: 3px;
-  color: var(--gold);
+  /* tags pass 07-17 (Sandy's verdict): dusty pill + navy ink, tag muting to match T-05 */
+  color: var(--navy);
+  background: var(--dustyblue);
+  filter: saturate(0.62) brightness(0.94);
   margin-bottom: 18px;
   display: inline-block;
-  border: 2px solid var(--gold);
+  border: 3px solid var(--navy);
   padding: 4px 14px;
   border-radius: 999px;
 }
@@ -1334,22 +1369,7 @@ a {
 .analytics {
   background: var(--greige); /* proposal 19 — Sandy's pick (workshop 07-16) */
 }
-.analytics__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* equal widths (Sandy 07-16; was 1.15/0.85) */
-  gap: 42px;
-  max-width: 1300px;
-  margin: 0 auto;
-  align-items: stretch;
-}
-/* the left column is a swap wrapper (calculator ⇄ dashboard) — let its card fill the row height */
-.analytics__grid > div:first-child {
-  display: flex;
-}
-.analytics__grid > div:first-child > * {
-  flex: 1;
-  min-width: 0;
-}
+/* (.analytics__grid removed 07-18 — Analytics now uses the .dsk__row diorama layout) */
 .calc__row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1586,9 +1606,6 @@ a {
 }
 
 @media (max-width: 900px) {
-  .analytics__grid {
-    grid-template-columns: 1fr;
-  }
   .calc__row {
     grid-template-columns: 1fr;
   }
@@ -1789,7 +1806,7 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
-  max-width: 820px;
+  max-width: 750px; /* Sandy 07-17: middle point between 680 and 820 */
   margin: 0 auto;
 }
 
@@ -1807,11 +1824,11 @@ a {
     linear-gradient(160deg, #5a3a22, #3a2414);
   border: 4px solid var(--navy);
   border-radius: 26px;
-  padding: clamp(18px, 2.6vw, 34px);
+  padding: clamp(16px, 2vw, 24px);
   box-shadow: var(--shadow-hard);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   position: relative;
 }
 .tvcab::before,
@@ -1870,14 +1887,14 @@ a {
 .tvcab__shelf {
   background: rgba(0, 0, 0, 0.22);
   border-radius: 14px;
-  padding: 14px 16px 16px;
+  padding: 10px 14px 12px;
 }
 .tvcab__shelf-label {
   font-family: var(--font-pixel);
   font-size: 7px;
   letter-spacing: 1.5px;
   color: rgba(242, 237, 218, 0.6);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .tvcab__tapes {
   display: grid;
@@ -1965,12 +1982,12 @@ a {
   border: 2px solid var(--navy);
   color: var(--navy);
   border-radius: 8px;
-  padding: 8px 18px;
+  padding: 6px 16px;
 }
 .tvset__screen-wrap {
   background: #1a1208;
   border-radius: 18px;
-  padding: 14px;
+  padding: 10px;
   border: 3px solid #14100a;
 }
 .tvset__screen {
@@ -1978,7 +1995,7 @@ a {
   background: #060812;
   border-radius: 16px; /* + curved-glass inset (workshop 07-16) */
   box-shadow: inset 0 0 46px rgba(0, 0, 0, 0.6);
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2 / 1; /* flattened so TV + lower third fit a normal viewport (Sandy 07-17) */
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -2038,14 +2055,14 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 14px;
-  padding: 16px 8px;
+  padding: 12px 8px;
 }
 .tvset__knob {
-  width: 58px;
-  height: 58px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #2c3a8c, var(--navy));
   border: 3px solid #000;
@@ -2055,11 +2072,11 @@ a {
 .tvset__knob::after {
   content: '';
   position: absolute;
-  top: 5px;
+  top: 4px;
   left: 50%;
   transform: translateX(-50%);
   width: 5px;
-  height: 18px;
+  height: 15px;
   border-radius: 3px;
   background: var(--pink);
 }
@@ -2075,7 +2092,7 @@ a {
 .tvset__grille {
   flex: 1;
   width: 100%;
-  min-height: 56px;
+  min-height: 36px;
   border-radius: 10px;
   border: 2px solid rgba(0, 0, 0, 0.4);
   background: repeating-linear-gradient(
@@ -2211,15 +2228,7 @@ a {
    SYSTEM ROOM (github grid + mail terminal)
    ============================================================ */
 
-.sysroom__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 42px;
-  max-width: 1300px;
-  margin: 0 auto;
-  align-items: stretch; /* GH card and mail terminal same height (Sandy 07-16) */
-}
-
+/* (.sysroom__grid removed 07-18 — System Room now uses the .dsk__row diorama layout) */
 .gh__head {
   display: flex;
   align-items: center;
@@ -2402,12 +2411,6 @@ a {
 }
 .mail__shortcut:hover {
   background: rgba(124, 179, 232, 0.3);
-}
-
-@media (max-width: 1000px) {
-  .sysroom__grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ============================================================
@@ -3057,6 +3060,802 @@ a {
 }
 
 /* reduced motion */
+/* ============================================================
+   RECEPTION DESK SCENE — 07-17 workshop (slate CRTs + SANDY-86
+   rig + floppy cert archive + manuals shelf). Replaces .term-unit
+   in About; old .term-unit / .edu CSS is dead → commit-prep cleanup.
+   ============================================================ */
+/* --- shared wall shelf: manuals + education plaque + cert disks --- */
+.dsk-shelfbar {
+  max-width: 1100px;
+  margin: 0 auto 38px;
+  text-align: center;
+}
+.dsk-shelfbar__caption {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--olive);
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+.dsk-shelfbar__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 26px;
+  padding: 0 12px;
+}
+.dsk-shelfbar__row .dsk-diskbox { margin-left: auto; }
+.dsk-shelfbar__plank {
+  height: 12px;
+  background: var(--wood);
+  border-radius: 3px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+}
+/* --- the two terminals: same top line, both seated on the desk --- */
+.dsk__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 44px;
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.dsk-mon,
+.dsk-rig {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+/* exact terminal height (Sandy 07-17); desk untouched. Desktop only — on
+   mobile the stacked columns keep their natural height so nothing clips */
+@media (min-width: 901px) {
+  .dsk-mon,
+  .dsk-rig { height: 558px; }
+}
+.dsk-mon .dsk-mon__case,
+.dsk-rig .dsk-mon__case {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* let the case shrink to its parent so the screen can scroll */
+}
+/* screens flex to fill their case. min-height:0 is what lets overflow-y:auto
+   actually clip + scroll long content (e.g. SKILLS.EXE's 8 bars) inside the
+   fixed-height terminal instead of spilling out past the desk */
+.dsk-mon .dsk-mon__screen,
+.dsk-rig .dsk-mon__screen {
+  flex: 1;
+  min-height: 0;
+}
+/* --- CRT monitor anatomy --- */
+.dsk-mon__case {
+  background: var(--slatecase);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 8px 10px 10px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.22);
+}
+.dsk-mon__strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px 10px;
+}
+.dsk-mon__label {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--gold);
+}
+.dsk-mon__led {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+}
+.dsk-mon__led[data-busy] {
+  animation: dskblink 0.2s steps(2) infinite;
+}
+.dsk-mon__screen {
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 13px 13px 15px;
+  color: var(--olive);
+}
+.dsk-mon__vents {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  padding-top: 9px;
+}
+.dsk-mon__vents i {
+  width: 28px;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+.dsk-mon__neck {
+  width: 48px;
+  height: 16px;
+  background: var(--slatedark);
+  margin: 0 auto;
+}
+.dsk-mon__base {
+  width: 150px;
+  height: 10px;
+  background: var(--slatedark);
+  border-radius: 5px 5px 2px 2px;
+  margin: 0 auto;
+}
+/* Andor amber-monochrome ink for the identity screen content */
+.dsk .about__label { color: var(--amberdeep); }
+.dsk .about__name { color: var(--olive); }
+.dsk .about__role { color: var(--amberdeep); }
+.dsk .about__meta { color: rgba(52, 48, 31, 0.75); }
+.dsk .about__bio { color: #3f3a28; }
+.dsk .about__lang span:first-child { color: var(--olive); }
+.dsk .chip { background: var(--gold); color: var(--olive); }
+/* three sizes down for the whole identity screen (Sandy 07-17: smaller terminals ×3) */
+.dsk .about__label { font-size: 7px; }
+.dsk .about__name { font-size: clamp(13px, 1.6vw, 16px); }
+.dsk .about__role { font-size: 17px; margin-bottom: 10px; }
+.dsk .about__meta { font-size: 15px; gap: 6px 16px; margin-bottom: 12px; }
+.dsk .about__bio { font-size: 12.5px; line-height: 1.6; margin-bottom: 14px; }
+.dsk .about__langs { gap: 6px; margin-bottom: 14px; }
+.dsk .about__lang { padding-bottom: 4px; }
+.dsk .about__lang .chip { font-size: 12px; }
+.dsk .about__quote { font-size: 15px; padding: 9px 12px; }
+.dsk .btn { font-size: 7.5px; padding: 9px 14px; }
+.dsk .about__quote {
+  background: var(--olive);
+  color: var(--gold);
+  border: none;
+}
+/* --- VAULT rig: monitor on the CPU --- */
+.dsk-vault {
+  height: 390px; /* flex basis: keeps the row height stable whatever disk content loads */
+  min-height: 260px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--khaki) transparent;
+}
+.dsk-vault__prompt {
+  font-family: var(--font-term);
+  font-size: 14px;
+  color: var(--amberdeep);
+  margin-bottom: 8px;
+}
+.dsk-vault__body { animation: dskfade 0.35s ease-out; }
+.dsk-vault__load { animation: dskfade 0.2s ease-out; }
+.dsk-vault__line {
+  font-family: var(--font-term);
+  font-size: 14px;
+  color: var(--olive);
+}
+.dsk-load {
+  border: 2px solid var(--olive);
+  border-radius: 4px;
+  padding: 2px;
+  margin-top: 12px;
+}
+.dsk-load i {
+  display: block;
+  height: 12px;
+  width: 0;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0 10px, var(--amberdeep) 10px 20px);
+  animation: dskread 0.9s linear forwards;
+}
+.dsk-vault__cert {
+  text-align: center;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dsk-vault__cert .dsk-vault__prompt { text-align: left; }
+.dsk-vault__glyph {
+  display: block;
+  font-size: 26px;
+  color: var(--amberdeep);
+  margin: 10px 0 8px;
+}
+.dsk-vault__name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14.5px;
+  margin-bottom: 5px;
+}
+.dsk-vault__issuer {
+  font-family: var(--font-term);
+  font-size: 14.5px;
+  color: var(--amberdeep);
+  margin-bottom: 8px;
+}
+.dsk-vault__year {
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  background: var(--olive);
+  color: var(--gold);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.dsk-vault__status {
+  font-family: var(--font-term);
+  font-size: 13px;
+  color: rgba(52, 48, 31, 0.65);
+  margin-top: 10px;
+}
+.dsk-cpu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  background: var(--slatecase);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-top: 10px;
+  box-shadow: 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+.dsk-cpu__bays { flex: 1; }
+.dsk-bay {
+  background: #2b2822;
+  height: 22px;
+  border-radius: 3px;
+  position: relative;
+  margin: 7px 0;
+}
+.dsk-bay::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 24px;
+  height: 5px;
+  background: #4a4030;
+  border-radius: 2px;
+}
+.dsk-bay__disk {
+  display: none;
+  position: absolute;
+  left: 14px;
+  top: -12px;
+  width: 104px;
+  height: 18px;
+  background: var(--olive);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+}
+.dsk-bay__disk::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  width: 50px;
+  height: 9px;
+  background: var(--paper);
+  border-radius: 1px;
+}
+.dsk-bay--busy .dsk-bay__disk { display: block; }
+.dsk-bay--reading .dsk-bay__disk {
+  display: block;
+  animation: dskdiskin 0.55s ease-in;
+}
+.dsk-cpu__ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: flex-end;
+}
+.dsk-cpu__brand {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  opacity: 0.85;
+}
+.dsk-cpu__hdd {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  color: var(--paper);
+}
+.dsk-cpu__hdd i {
+  width: 8px;
+  height: 8px;
+  background: #c96a4a;
+  border-radius: 1px;
+}
+.dsk-cpu__hdd[data-busy] i { animation: dskblink 0.15s steps(2) infinite; }
+.dsk-cpu__turbo {
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  color: var(--olive);
+  background: var(--khaki);
+  padding: 3px 6px;
+  border-radius: 2px;
+}
+.dsk-cpu__power {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+/* --- the desk + props --- */
+.dsk__desk {
+  position: relative;
+  max-width: 1160px;
+  margin: -4px auto 0;
+  height: 84px;
+  border-radius: 6px 6px 12px 12px;
+  background: repeating-linear-gradient(0deg, var(--wood-2) 0 3px, var(--wood) 3px 6px);
+  box-shadow: 0 7px 0 rgba(0, 0, 0, 0.18);
+}
+.dsk__propsL {
+  position: absolute;
+  top: -32px;
+  left: 40px;
+  display: flex;
+  gap: 26px;
+  align-items: flex-end;
+}
+.dsk__propsR {
+  position: absolute;
+  top: -26px; /* lowered 8px so mug + bell bottoms line up with the plant */
+  right: 40px;
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+}
+/* plant, standalone, at the left edge of the right (SANDY-86) terminal */
+.dsk__propsRL {
+  position: absolute;
+  top: -32px;
+  left: 52%;
+}
+/* sticky note, standalone, at the right edge of the left (IDENTITY) terminal */
+.dsk__propsLR {
+  position: absolute;
+  top: -32px;
+  right: 52%;
+}
+.dsk-plaque {
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: var(--olive);
+  background: var(--gold);
+  padding: 5px 9px;
+  border-radius: 3px;
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+.dsk-sticky {
+  width: 24px;
+  height: 24px;
+  background: var(--paper);
+  transform: rotate(-7deg);
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+.dsk-sticky::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 8px;
+  height: 2px;
+  background: var(--khaki);
+  box-shadow: 0 5px 0 var(--khaki);
+}
+.dsk-plant__leaf {
+  width: 20px;
+  height: 16px;
+  position: relative;
+  margin: 0 auto;
+}
+.dsk-plant__leaf::before,
+.dsk-plant__leaf::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 9px;
+  height: 15px;
+  background: var(--sage);
+  border-radius: 50% 50% 0 0;
+}
+.dsk-plant__leaf::before { left: 0; transform: rotate(-18deg); }
+.dsk-plant__leaf::after { right: 0; transform: rotate(18deg); }
+.dsk-plant__pot {
+  width: 22px;
+  height: 13px;
+  background: var(--clay);
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+  margin: 0 auto;
+}
+.dsk-mug {
+  width: 26px;
+  height: 20px;
+  background: var(--paper);
+  border-radius: 0 0 7px 7px;
+  position: relative;
+}
+.dsk-mug::after {
+  content: "";
+  position: absolute;
+  right: -9px;
+  top: 3px;
+  width: 9px;
+  height: 10px;
+  border: 3px solid var(--paper);
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+}
+.dsk-mug::before {
+  content: "︶";
+  position: absolute;
+  top: -14px;
+  left: 6px;
+  font-size: 11px;
+  color: var(--khaki);
+}
+.dsk-bell {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.dsk-bell:focus-visible { outline: 2px dashed var(--gold); outline-offset: 4px; }
+.dsk-bell:active .dsk-bell__dome { transform: translateY(2px); }
+.dsk-bell__dome {
+  display: block;
+  width: 32px;
+  height: 17px;
+  border-radius: 16px 16px 0 0;
+  background: var(--gold);
+  position: relative;
+  transition: transform 0.08s;
+}
+.dsk-bell__dome::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 13px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amberdeep);
+}
+.dsk-bell__base {
+  display: block;
+  width: 42px;
+  height: 6px;
+  background: var(--amberdeep);
+  border-radius: 3px;
+  margin-left: -5px;
+}
+/* --- 80s disk file box: floppies stored upright, spine labels out; hover
+   lifts a disk from the box, the one in drive A: sits sunken + dimmed --- */
+.dsk-diskbox {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  padding: 12px 12px 8px;
+  background: var(--slatedark);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 7px 7px 4px 4px;
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.18);
+}
+.dsk-diskbox__front {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  z-index: 2;
+  pointer-events: none; /* clicks fall through to the spines behind it */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--slatecase);
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 4px 4px;
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+.dsk-spine {
+  width: 30px;
+  height: 96px;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  transition: transform 0.15s;
+  font-family: inherit;
+}
+.dsk-spine:hover:not(:disabled):not(.dsk-spine--indrive) { transform: translateY(-12px); }
+.dsk-spine:focus-visible { outline: 2px dashed var(--olive); outline-offset: 3px; }
+.dsk-spine:disabled { cursor: wait; }
+.dsk-spine--a { background: var(--slatecase); }
+.dsk-spine--b { background: var(--olive); }
+.dsk-spine--sys { background: var(--gold); }
+.dsk-spine--indrive { opacity: 0.45; transform: translateY(8px); cursor: default; }
+.dsk-spine__label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background: var(--paper);
+  color: var(--olive);
+  font-family: var(--font-term);
+  font-size: 13px;
+  line-height: 1;
+  padding: 6px 2px;
+  border-radius: 2px;
+  max-height: 78px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* --- manuals + education plaque (live on the shared shelf) --- */
+.dsk-shelf__books {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  justify-content: center;
+}
+.shelfbook {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 1px;
+  padding: 10px 8px;
+  border-radius: 0 0 3px 3px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: margin-top 0.25s ease;
+}
+.shelfbook:hover { margin-top: -9px; }
+.shelfbook:focus-visible { outline: 2px dashed var(--olive); outline-offset: 3px; }
+.shelfbook--utel { background: var(--gold); color: var(--olive); }
+.shelfbook--hotel { background: var(--slatecase); color: var(--paper); }
+.shelfbook--biz { background: var(--olive); color: var(--gold); }
+.shelfbook--ai { background: var(--amberdeep); color: var(--paper); }
+.shelfbook--out {
+  margin-top: -16px;
+  box-shadow: 0 0 14px rgba(239, 193, 94, 0.55);
+}
+.dsk-shelf__card {
+  display: inline-block;
+  background: var(--paper);
+  border: 1px solid var(--khaki);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: var(--olive);
+  text-align: left;
+  max-width: 280px;
+  margin-bottom: 36px; /* floats above the plank, next to the manuals */
+  animation: dskfade 0.3s ease-out;
+}
+.dsk-shelf__card b {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.dsk-shelf__card small {
+  display: block;
+  font-family: var(--font-term);
+  font-size: 15.5px;
+  color: var(--amberdeep);
+}
+@keyframes dskblink { 50% { opacity: 0.15; } }
+@keyframes dskread { to { width: 100%; } }
+@keyframes dskfade { from { opacity: 0; transform: translateY(10px); } }
+@keyframes dskdiskin { from { transform: translateX(-64px); } }
+
+/* ============================================================
+   ANALYTICS DESK — same CRT-workstation diorama as reception,
+   housing the calculator + research logs. Reuses .dsk-* chrome;
+   these rules size the terminals to content and re-ink the panel
+   content onto the paper screen (Andor amber-monochrome).
+   ============================================================ */
+/* --- shared by any panel diorama (.dsk--panel = analytics + sysroom) --- */
+/* content-sized terminals (overrides the reception 558px lock); both
+   columns still level via .dsk__row grid stretch, screens scroll if over */
+.dsk--panel .dsk-mon,
+.dsk--panel .dsk-rig { height: auto; }
+.dsk--panel .dsk-mon__screen {
+  min-height: 0;
+  max-height: 620px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--khaki) transparent;
+}
+/* the panel content is now the paper screen itself — drop the inner card chrome */
+.dsk--panel .card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+}
+/* re-ink shared headings (gh__title/sub used by both sections) */
+.dsk--panel .gh__title { color: var(--olive); }
+.dsk--panel .gh__sub { color: var(--amberdeep); opacity: 1; }
+/* --- analytics-specific --- */
+.dsk--analytics .dsk-vault__prompt { text-align: left; }
+/* --- calculator --- */
+.dsk--analytics .calc__field label { color: var(--amberdeep); opacity: 1; }
+.dsk--analytics .calc__value { color: var(--olive); }
+.dsk--analytics .calc__field input[type='range'] { accent-color: var(--amberdeep); }
+.dsk--analytics .calc__result {
+  background: rgba(52, 48, 31, 0.06);
+  border: 2px solid var(--khaki);
+}
+.dsk--analytics .calc__fv-label,
+.dsk--analytics .calc__int-label { color: var(--amberdeep); }
+.dsk--analytics .calc__fv { color: var(--olive); }
+.dsk--analytics .calc__int { color: var(--amberdeep); }
+.dsk--analytics .calc__chart {
+  background: var(--olive);
+  border-color: var(--olive);
+}
+/* --- research logs --- */
+.dsk--analytics .research-list { max-height: none; overflow: visible; }
+.dsk--analytics .research-row {
+  border-color: var(--khaki);
+  background: rgba(52, 48, 31, 0.04);
+}
+.dsk--analytics .research-row:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(239, 193, 94, 0.35);
+}
+.dsk--analytics .research-row__num { color: var(--amberdeep); }
+.dsk--analytics .research-row__title { color: var(--olive); }
+.dsk--analytics .research-row__legend { color: rgba(52, 48, 31, 0.7); }
+.dsk--analytics .research-row__btn { background: var(--olive); color: var(--gold); }
+.dsk--analytics .research-row__btn:hover { background: var(--gold); color: var(--olive); }
+.dsk--analytics .cert__year { background: var(--olive); color: var(--gold); }
+/* --- financial dashboard (swap target) --- */
+.dsk--analytics .fin-dash__back { background: var(--gold); color: var(--olive); }
+.dsk--analytics .kpi-tile {
+  background: rgba(52, 48, 31, 0.06);
+  border-color: var(--khaki);
+}
+.dsk--analytics .kpi-tile__value { color: var(--olive); }
+.dsk--analytics .kpi-tile__label,
+.dsk--analytics .kpi-tile__source { color: var(--amberdeep); }
+.dsk--analytics .fin-dash__chart { background: var(--olive); border-color: var(--olive); }
+
+/* --- two sizes down: shrink the terminals (content only, desk untouched) --- */
+.dsk--analytics .dsk-mon__screen { padding: 12px 13px 14px; }
+.dsk--analytics .gh__title { font-size: 11px; }
+.dsk--analytics .gh__sub { font-size: 14px; }
+/* calculator */
+.dsk--analytics .calc__row { gap: 16px; margin-bottom: 14px; }
+.dsk--analytics .calc__field label { font-size: 7.5px; margin-bottom: 6px; }
+.dsk--analytics .calc__value { font-size: 22px; }
+.dsk--analytics .calc__result { padding: 12px 16px; margin-bottom: 12px; }
+.dsk--analytics .calc__fv-label,
+.dsk--analytics .calc__int-label { font-size: 7.5px; margin-bottom: 6px; }
+.dsk--analytics .calc__fv { font-size: clamp(28px, 3.6vw, 38px); }
+.dsk--analytics .calc__int { font-size: 20px; }
+.dsk--analytics .calc__chart { width: 66%; margin: 0 auto; display: block; }
+/* research logs */
+.dsk--analytics .research-list { gap: 10px; }
+.dsk--analytics .research-row { padding: 12px; gap: 8px; }
+.dsk--analytics .research-row__num { font-size: 12px; }
+.dsk--analytics .research-row__title { font-size: 13px; }
+.dsk--analytics .research-row__legend { font-size: 14px; }
+.dsk--analytics .research-row__btn { font-size: 7px; padding: 6px 9px; }
+.dsk--analytics .cert__year { font-size: 7px; padding: 5px 9px; }
+/* financial dashboard */
+.dsk--analytics .fin-dash { gap: 16px; }
+.dsk--analytics .kpi-tile { padding: 14px 16px; }
+.dsk--analytics .kpi-tile__value { font-size: clamp(20px, 2.4vw, 28px); }
+
+/* ============================================================
+   SYSTEM ROOM DESK — same diorama for #mail (Sandy 07-18).
+   GitHub grid (left) + mail form (right) re-inked onto the paper
+   screens. The contribution grid GREENS stay (authentic GH look).
+   ============================================================ */
+/* GitHub card (chrome already stripped by .dsk--panel .card) */
+.dsk--sysroom .gh__branch {
+  background: var(--gold);
+  border-color: var(--olive);
+  color: var(--olive);
+}
+.dsk--sysroom .console {
+  background: var(--olive);
+  color: var(--paper);
+}
+.dsk--sysroom .console__line .b { color: var(--gold); }
+.dsk--sysroom .console__line .h { color: #e9b96a; }
+/* mail form — strip the navy panel, land it on the paper screen */
+.dsk--sysroom .mail {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  color: var(--olive);
+}
+.dsk--sysroom .mail__title { color: var(--olive); }
+.dsk--sysroom .mail__prompt { color: var(--amberdeep); }
+.dsk--sysroom .mail__prompt b { color: var(--olive); }
+.dsk--sysroom .mail input,
+.dsk--sysroom .mail textarea {
+  background: rgba(52, 48, 31, 0.05);
+  border-color: var(--khaki);
+  color: var(--olive);
+}
+.dsk--sysroom .mail input::placeholder,
+.dsk--sysroom .mail textarea::placeholder { color: rgba(52, 48, 31, 0.45); }
+.dsk--sysroom .mail input:focus,
+.dsk--sysroom .mail textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(239, 193, 94, 0.3);
+}
+.dsk--sysroom .mail__send {
+  background: var(--gold);
+  border-color: var(--amberdeep);
+  color: var(--olive);
+}
+.dsk--sysroom .mail__stdout {
+  background: var(--olive);
+  border-color: rgba(52, 48, 31, 0.4);
+  color: var(--gold);
+}
+.dsk--sysroom .mail__shortcut {
+  background: var(--olive);
+  border: none;
+  color: var(--gold);
+}
+.dsk--sysroom .mail__shortcut:hover { background: var(--gold); color: var(--olive); }
+
+/* --- three sizes down: shrink the terminals (content only, desk untouched) --- */
+.dsk--sysroom .dsk-mon__screen { padding: 10px 11px 12px; }
+/* github card */
+.dsk--sysroom .gh__title { font-size: 10px; }
+.dsk--sysroom .gh__sub { font-size: 13px; }
+.dsk--sysroom .gh__head { margin-bottom: 12px; }
+.dsk--sysroom .gh__branch { font-size: 14px; padding: 3px 9px; }
+.dsk--sysroom .gh__cells { gap: 3px; margin-bottom: 8px; }
+.dsk--sysroom .gh__legend { font-size: 10px; margin-bottom: 12px; }
+.dsk--sysroom .console { font-size: 13px; line-height: 1.4; padding: 12px; min-height: 150px; }
+.dsk--sysroom .console__dots { margin-bottom: 8px; }
+/* mail form */
+.dsk--sysroom .mail__title { font-size: 10px; margin-bottom: 14px; }
+.dsk--sysroom .mail__prompt { font-size: 13px; margin-bottom: 4px; }
+.dsk--sysroom .mail input,
+.dsk--sysroom .mail textarea { font-size: 15px; padding: 8px 11px; margin-bottom: 9px; }
+.dsk--sysroom .mail__send { font-size: 8.5px; padding: 10px; margin-bottom: 12px; }
+.dsk--sysroom .mail__stdout { font-size: 13px; min-height: 54px; padding: 10px; margin-bottom: 12px; }
+.dsk--sysroom .mail__shortcuts { gap: 8px; }
+.dsk--sysroom .mail__shortcut { font-size: 12px; padding: 5px 10px; }
+
+@media (max-width: 900px) {
+  .dsk__row { grid-template-columns: 1fr; gap: 38px; }
+  .dsk-shelfbar__row { flex-wrap: wrap; justify-content: center; }
+  .dsk-shelfbar__row .dsk-diskbox { margin-left: 0; }
+  .dsk-shelf__card { margin-bottom: 0; }
+  .dsk__desk { height: 64px; }
+  .dsk__propsL { left: 18px; gap: 16px; }
+  .dsk__propsR { right: 18px; gap: 18px; }
+  .dsk__propsRL { left: auto; right: 90px; top: -30px; }
+  .dsk__propsLR { right: auto; left: 90px; top: -30px; }
+  .dsk-vault { height: 360px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

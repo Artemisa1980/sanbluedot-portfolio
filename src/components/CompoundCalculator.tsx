@@ -6,12 +6,15 @@ import { sfx } from '../sound';
 const fmt = (n: number) =>
   n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+const INITIAL_PRINCIPAL = 5000;
+
 export default function CompoundCalculator() {
   const fvRef = useRef<HTMLDivElement>(null);
   const intRef = useRef<HTMLDivElement>(null);
-  const shown = useRef({ fv: 0, int: 0 });
+  // seed the count-up at the principal (not $0) so FUTURE VALUE never momentarily reads below it
+  const shown = useRef({ fv: INITIAL_PRINCIPAL, int: 0 });
 
-  const [principal, setPrincipal] = useState(5000);
+  const [principal, setPrincipal] = useState(INITIAL_PRINCIPAL);
   const [rate, setRate] = useState(6.5);
   const [years, setYears] = useState(5);
 
@@ -62,9 +65,10 @@ export default function CompoundCalculator() {
 
       <div className="calc__row">
         <div className="calc__field">
-          <label>Principal (USD)</label>
+          <label htmlFor="calc-principal">Principal (USD)</label>
           <div className="calc__value">${principal.toLocaleString()}</div>
           <input
+            id="calc-principal"
             type="range"
             min={500}
             max={50000}
@@ -74,9 +78,10 @@ export default function CompoundCalculator() {
           />
         </div>
         <div className="calc__field">
-          <label>Annual Rate (%)</label>
+          <label htmlFor="calc-rate">Annual Rate (%)</label>
           <div className="calc__value">{rate.toFixed(1)} %</div>
           <input
+            id="calc-rate"
             type="range"
             min={0.5}
             max={15}
@@ -86,9 +91,10 @@ export default function CompoundCalculator() {
           />
         </div>
         <div className="calc__field">
-          <label>Period (Years)</label>
+          <label htmlFor="calc-years">Period (Years)</label>
           <div className="calc__value">{years} Years</div>
           <input
+            id="calc-years"
             type="range"
             min={1}
             max={30}

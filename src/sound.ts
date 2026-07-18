@@ -48,6 +48,16 @@ function tone(
 
 export const sfx = {
   click: () => tone(660, 0.06, 'square', 0.03),
+  // reception desk bell — bright ding with a soft harmonic (desk scene 07-17)
+  bell: () => {
+    tone(1568, 0.5, 'sine', 0.05);
+    tone(2349, 0.4, 'sine', 0.025, 0.005);
+  },
+  // floppy drive chatter — low motor ticks + a head-seek chirp (desk scene 07-17)
+  floppy: () => {
+    for (let i = 0; i < 6; i++) tone(90 + (i % 2) * 30, 0.045, 'sawtooth', 0.02, i * 0.07);
+    tone(440, 0.06, 'square', 0.02, 0.45, 220);
+  },
   hover: () => tone(880, 0.04, 'square', 0.015),
   coin: () => {
     tone(988, 0.09, 'square', 0.04);
