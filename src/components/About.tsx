@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { PROFILE, CERTIFICATIONS, SKILLS, EDUCATION } from '../data';
+import { PROFILE, CERTIFICATIONS, SKILLS, EDUCATION, type Certification } from '../data';
 import { sfx } from '../sound';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -36,13 +36,16 @@ export default function About() {
   const [disk, setDisk] = useState(CERTIFICATIONS[0].id);
   const [pending, setPending] = useState<string | null>(null);
   const [book, setBook] = useState('utel');
+  const [shot, setShot] = useState<Certification | null>(null); // cert open in the lightbox viewer
   const reading = pending !== null;
 
   // entrance: shelf drops in, monitors rise, desk slides in, books pop up
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        '.dsk-shelfbar',
+        // the shelf pieces, not the .dsk-shelfbar box — on mobile the bar is
+        // display:contents (shelf split) and a contents box can't be tweened
+        '.dsk-shelfbar__caption, .dsk-shelf__books, .dsk-shelf__card, .dsk-diskbox, .dsk-shelfbar__plank',
         { y: -34, opacity: 0 },
         {
           y: 0,
@@ -84,7 +87,8 @@ export default function About() {
           duration: 0.5,
           stagger: 0.09,
           ease: 'back.out(1.6)',
-          scrollTrigger: { trigger: '.dsk-shelfbar', start: 'top 88%' },
+          // trigger on the books box, not the bar (contents on mobile has no rect)
+          scrollTrigger: { trigger: '.dsk-shelf__books', start: 'top 88%' },
         }
       );
     }, rootRef);
@@ -116,6 +120,38 @@ export default function About() {
   }, [disk, reading]);
 
   useEffect(() => () => window.clearTimeout(readTimer.current), []);
+
+  // lightbox open: close on Escape, trap Tab inside the dialog, lock body scroll
+  const boxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!shot) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShot(null);
+        return;
+      }
+      if (e.key === 'Tab' && boxRef.current) {
+        const f = boxRef.current.querySelectorAll<HTMLElement>('button, a[href]');
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [shot]);
 
   function insert(id: string) {
     if (reading || id === disk) return;
@@ -182,6 +218,9 @@ export default function About() {
               ))}
               <span className="dsk-diskbox__front" aria-hidden="true">CERTS · A:</span>
             </div>
+            {/* second board, mobile only: on ≤900px the shelf splits and the disk
+                box rides above VAULT on its own plank (hidden on desktop) */}
+            <div className="dsk-shelfbar__plank dsk-shelfbar__plank--b" aria-hidden="true" />
           </div>
           <div className="dsk-shelfbar__plank" />
         </div>
@@ -281,6 +320,27 @@ export default function About() {
                     <div className="dsk-vault__issuer">{cert.issuer}</div>
                     <span className="dsk-vault__year">{cert.year}</span>
                     <div className="dsk-vault__status">STATUS: VERIFIED ▪ ARCHIVED IN VAULT</div>
+                    {cert.image && (
+                      <button
+                        className="dsk-vault__shot"
+                        onClick={() => { sfx.click(); setShot(cert); }}
+                        aria-haspopup="dialog"
+                      >
+                        <img src={cert.image} alt={`${cert.name} — certificate scan`} loading="lazy" />
+                        <span className="dsk-vault__shot-hint">◉ CLICK TO ENLARGE</span>
+                      </button>
+                    )}
+                    {cert.verify && (
+                      <a
+                        className="dsk-vault__verify"
+                        href={cert.verify}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => sfx.click()}
+                      >
+                        ✓ VERIFY AT ISSUER ↗
+                      </a>
+                    )}
                   </div>
                 ) : null}
               </div>
@@ -317,6 +377,48 @@ export default function About() {
             terminal carries its own props when the row stacks on mobile. */}
         <div className="dsk__desk" />
       </div>
+
+      {/* retro lightbox: the certificate scan blown up in a slate CRT frame.
+          Backdrop click / ✕ / Escape close it; body scroll locks while open. */}
+      {shot && (
+        <div
+          className="certbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${shot.name} — certificate`}
+          onClick={() => { sfx.click(); setShot(null); }}
+        >
+          <div className="certbox__frame" ref={boxRef} onClick={(e) => e.stopPropagation()}>
+            <div className="certbox__strip">
+              <span className="certbox__label">▚ CERT VIEWER — {fileOf(shot.id)}</span>
+              <button
+                className="certbox__close"
+                onClick={() => { sfx.click(); setShot(null); }}
+                aria-label="Close certificate viewer"
+                autoFocus
+              >
+                ✕
+              </button>
+            </div>
+            <div className="certbox__screen">
+              <img src={shot.image} alt={`${shot.name} — full certificate`} />
+            </div>
+            <div className="certbox__caption">
+              <span>{shot.name} · {shot.issuer} · {shot.year}</span>
+              {shot.verify && (
+                <a
+                  href={shot.verify}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => { e.stopPropagation(); sfx.click(); }}
+                >
+                  ✓ VERIFY ↗
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

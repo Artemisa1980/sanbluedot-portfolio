@@ -167,13 +167,26 @@ export const SKILLS: Skill[] = [
   { name: 'Leadership & Partner Mentoring', level: 95, category: 'Soft Skills' },
 ];
 
-export const CERTIFICATIONS = [
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  year: string;
+  icon: string;
+  /** scan of the real certificate (public/certs/) — shown + zoomable in the VAULT */
+  image?: string;
+  /** issuer's public verification URL (printed on the certificate) */
+  verify?: string;
+}
+
+/* years + issuers + verify URLs taken from the actual certificate documents (07-23) */
+export const CERTIFICATIONS: Certification[] = [
   { id: 'ibm', name: 'AI Builder Professional Certificate', issuer: 'IBM / Coursera', year: 'In Progress', icon: '🌐' },
-  { id: 'git', name: 'Getting Started with Git and GitHub', issuer: 'Google / Coursera', year: '2025', icon: '🐙' },
-  { id: 'gai', name: 'Google AI Professional Certificate', issuer: 'Google', year: '2025', icon: '✨' },
-  { id: 'prompt', name: 'Google Prompting Essentials Specialization', issuer: 'Google', year: '2025', icon: '🧠' },
-  { id: 'python', name: 'Programming for Everybody (Python)', issuer: 'Univ. of Michigan / Coursera', year: '2025', icon: '🐍' },
-  { id: 'excel', name: 'Excel Skills for Business: Essentials', issuer: 'Macquarie University / Coursera', year: '2024', icon: '📊' },
+  { id: 'git', name: 'Getting Started with Git and GitHub', issuer: 'IBM / Coursera', year: '2026', icon: '🐙', image: '/certs/git.webp', verify: 'https://coursera.org/verify/O1RP4U5OS1K3' },
+  { id: 'gai', name: 'Google AI Professional Certificate', issuer: 'Google', year: '2026', icon: '✨', image: '/certs/gai.webp', verify: 'https://coursera.org/verify/professional-cert/LLOXF3UICPUM' },
+  { id: 'prompt', name: 'Google Prompting Essentials Specialization', issuer: 'Google', year: '2026', icon: '🧠', image: '/certs/prompt.webp', verify: 'https://coursera.org/verify/specialization/JHFBURP7QBVZ' },
+  { id: 'python', name: 'Programming for Everybody (Python)', issuer: 'Univ. of Michigan / Coursera', year: '2026', icon: '🐍', image: '/certs/python.webp', verify: 'https://coursera.org/verify/MUH72OQ8ZI89' },
+  { id: 'excel', name: 'Excel Skills for Business: Essentials', issuer: 'Macquarie University / Coursera', year: '2026', icon: '📊', image: '/certs/excel.webp', verify: 'https://coursera.org/verify/SVHA7SJ99PYH' },
 ];
 
 export const EDUCATION = [
