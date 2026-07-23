@@ -227,6 +227,12 @@ export default function About() {
             </div>
             <div className="dsk-mon__neck" />
             <div className="dsk-mon__base" />
+            <div className="dsk__propsL">
+              <div className="dsk-plaque">&lt;SANDY.SYSDEV/&gt; · AI BUILDER</div>
+            </div>
+            <div className="dsk__propsLR">
+              <div className="dsk-sticky" />
+            </div>
           </div>
 
           {/* VAULT.SYS — monitor stacked on the SANDY-86 CPU */}
@@ -294,30 +300,22 @@ export default function About() {
                 <span className="dsk-cpu__power" />
               </div>
             </div>
+            <div className="dsk__propsRL">
+              <div className="dsk-plant"><div className="dsk-plant__leaf" /><div className="dsk-plant__pot" /></div>
+            </div>
+            <div className="dsk__propsR">
+              <div className="dsk-mug" />
+              <button className="dsk-bell" aria-label="Ring the reception bell" onClick={() => sfx.bell()}>
+                <span className="dsk-bell__dome" />
+                <span className="dsk-bell__base" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* the desk surface + props. The plant sits at the LEFT edge of the
-            right (SANDY-86) terminal — its own group, not moved to the other
-            terminal (Sandy 07-18). */}
-        <div className="dsk__desk">
-          <div className="dsk__propsL">
-            <div className="dsk-plaque">&lt;SANDY.SYSDEV/&gt; · AI BUILDER</div>
-          </div>
-          <div className="dsk__propsLR">
-            <div className="dsk-sticky" />
-          </div>
-          <div className="dsk__propsRL">
-            <div className="dsk-plant"><div className="dsk-plant__leaf" /><div className="dsk-plant__pot" /></div>
-          </div>
-          <div className="dsk__propsR">
-            <div className="dsk-mug" />
-            <button className="dsk-bell" aria-label="Ring the reception bell" onClick={() => sfx.bell()}>
-              <span className="dsk-bell__dome" />
-              <span className="dsk-bell__base" />
-            </button>
-          </div>
-        </div>
+        {/* the desk surface. Props now live inside each terminal (above) so each
+            terminal carries its own props when the row stacks on mobile. */}
+        <div className="dsk__desk" />
       </div>
     </section>
   );

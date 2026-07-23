@@ -246,7 +246,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--dustyblue); /* Sandy's favorite blue — boot screen (workshop 07-16) */
+  background: var(--slatedark); /* slate-dark boot screen (Sandy 07-20) */
   color: var(--paper); /* preloader V3 verdict 07-17: paper log, gold only on accents */
   display: flex;
   flex-direction: column;
@@ -2139,6 +2139,23 @@ a {
   box-shadow: none;
 }
 
+/* phone/portrait: stack the set — screen full-width (keeps its 2:1) on top,
+   controls in a row below. Otherwise the 92px side panel is taller than the
+   screen and squeezes it into a tall narrow strip with a big black void
+   (Sandy 07-18). Desktop (>700px) keeps the side-by-side design. */
+@media (max-width: 700px) {
+  .tvset { grid-template-columns: 1fr; gap: 14px; }
+  .tvset__panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 12px;
+  }
+  .tvset__grille { flex: 0 0 70px; min-height: 26px; }
+}
+
 /* lower third — broadcast caption bar under the set (workshop 07-16 v2, replaced the guide panel) */
 .tvlower {
   background: var(--navy);
@@ -2418,7 +2435,7 @@ a {
    ============================================================ */
 
 .footer {
-  background: var(--sage); /* proposal 08 — same as hero (workshop 07-16) */
+  background: var(--navy); /* dark footer (proposal opt 3) — high-contrast close, letters glow */
   color: var(--cream);
   /* border-top now lives in the section-dividers rule (rail gradient, workshop 07-16) */
   padding: 48px 5vw 36px;
@@ -2438,7 +2455,7 @@ a {
   font-size: 13.5px;
   line-height: 1.7;
   max-width: 640px;
-  color: rgba(242, 237, 218, 0.75);
+  color: rgba(242, 237, 218, 0.85);
 }
 .footer__host {
   font-family: var(--font-term);
@@ -2450,16 +2467,16 @@ a {
 .footer__top {
   font-family: var(--font-pixel);
   font-size: 9px;
-  background: var(--navy-2);
-  color: var(--mint);
-  border: 2px solid var(--mint);
+  background: var(--gold);
+  color: var(--navy);
+  border: 2px solid var(--gold);
   border-radius: 12px;
   padding: 12px 16px;
   transition: all 0.15s ease;
 }
 .footer__top:hover {
-  background: var(--mint);
-  color: var(--navy);
+  background: transparent;
+  color: var(--gold);
 }
 
 /* ---------- sanblueᵈᵒᵗ wordmark / signature ---------- */
@@ -3424,6 +3441,18 @@ a {
   top: -32px;
   right: 52%;
 }
+/* --- props anchored to their OWN terminal so each terminal carries its props
+   when the row stacks on mobile (all three diorama sections). One rule set for
+   every section at every width: props sit at the terminal's base, which rests
+   on the desk (terminal bottom = desk top + 4px in all three sections —
+   measured; the old per-section +74px desktop override was calibrated against
+   a stacked-layout measurement and misplaced the props, BC gate 07-23). --- */
+.dsk-mon,
+.dsk-rig { position: relative; }
+.dsk-mon > .dsk__propsL  { top: auto; left: 10px; right: auto; bottom: 20px; }
+.dsk-mon > .dsk__propsLR { top: auto; left: auto; right: 1px; bottom: 12px; }
+.dsk-rig > .dsk__propsRL { top: auto; left: 1px; right: auto; bottom: 7px; }
+.dsk-rig > .dsk__propsR  { top: auto; left: auto; right: 10px; bottom: 7px; }
 .dsk-plaque {
   font-family: var(--font-pixel);
   font-size: 6px;
@@ -3849,10 +3878,6 @@ a {
   .dsk-shelfbar__row .dsk-diskbox { margin-left: 0; }
   .dsk-shelf__card { margin-bottom: 0; }
   .dsk__desk { height: 64px; }
-  .dsk__propsL { left: 18px; gap: 16px; }
-  .dsk__propsR { right: 18px; gap: 18px; }
-  .dsk__propsRL { left: auto; right: 90px; top: -30px; }
-  .dsk__propsLR { right: auto; left: 90px; top: -30px; }
   .dsk-vault { height: 360px; }
 }
 

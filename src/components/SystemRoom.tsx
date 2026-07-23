@@ -171,6 +171,12 @@ export default function SystemRoom() {
             </div>
             <div className="dsk-mon__neck" />
             <div className="dsk-mon__base" />
+            <div className="dsk__propsL">
+              <div className="dsk-plaque">&lt;SANDY.SYSDEV/&gt; · AI BUILDER</div>
+            </div>
+            <div className="dsk__propsLR">
+              <div className="dsk-sticky" />
+            </div>
           </div>
 
           {/* RIGHT — mail room in a monitor stacked on the SANDY-86 CPU */}
@@ -264,28 +270,22 @@ export default function SystemRoom() {
                 <span className="dsk-cpu__power" />
               </div>
             </div>
+            <div className="dsk__propsRL">
+              <div className="dsk-plant"><div className="dsk-plant__leaf" /><div className="dsk-plant__pot" /></div>
+            </div>
+            <div className="dsk__propsR">
+              <div className="dsk-mug" />
+              <button className="dsk-bell" aria-label="Ring the desk bell" onClick={() => sfx.bell()}>
+                <span className="dsk-bell__dome" />
+                <span className="dsk-bell__base" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* the desk surface + props (same as reception/analytics) */}
-        <div className="dsk__desk">
-          <div className="dsk__propsL">
-            <div className="dsk-plaque">&lt;SANDY.SYSDEV/&gt; · AI BUILDER</div>
-          </div>
-          <div className="dsk__propsLR">
-            <div className="dsk-sticky" />
-          </div>
-          <div className="dsk__propsRL">
-            <div className="dsk-plant"><div className="dsk-plant__leaf" /><div className="dsk-plant__pot" /></div>
-          </div>
-          <div className="dsk__propsR">
-            <div className="dsk-mug" />
-            <button className="dsk-bell" aria-label="Ring the desk bell" onClick={() => sfx.bell()}>
-              <span className="dsk-bell__dome" />
-              <span className="dsk-bell__base" />
-            </button>
-          </div>
-        </div>
+        {/* the desk surface. Props now live inside each terminal (above) so each
+            terminal carries its own props when the row stacks on mobile. */}
+        <div className="dsk__desk" />
       </div>
     </section>
   );
