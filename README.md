@@ -1,10 +1,10 @@
-# SANDY.SYSDEV v2.0 — Retro Dev-Station
+# SANDY.SYSDEV v2.0 — retro dev-station
 
 Awwwards-style retro arcade portfolio for **Sandy E. Quintero**, rebuilt from the ground up
 with **React 19 + GSAP (ScrollTrigger) + Three.js**, themed on the sanblue logo palette
 (navy, gold, pink, mint, cyan, purple) fused with '80s CRT arcade aesthetics.
 
-**Live:** https://sandy-sysdev-v2.web.app
+**Live:** https://sanbluedot.com
 
 ## Run it
 
