@@ -37,10 +37,13 @@ export default function About() {
   const [pending, setPending] = useState<string | null>(null);
   const [book, setBook] = useState('utel');
   const [shot, setShot] = useState<Certification | null>(null); // cert open in the lightbox viewer
+  const shotButtonRef = useRef<HTMLButtonElement>(null);
   const reading = pending !== null;
 
   // entrance: shelf drops in, monitors rise, desk slides in, books pop up
   useEffect(() => {
+    // GSAP writes inline styles, which the CSS reduced-motion block cannot reach
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         // the shelf pieces, not the .dsk-shelfbar box — on mobile the bar is
@@ -98,11 +101,19 @@ export default function About() {
   // skill bars fill each time SKILLS.EXE finishes loading
   useEffect(() => {
     if (disk !== 'skills' || reading) return;
+    // The bars start at width 0 in CSS, so with reduced motion they are landed on
+    // their final value instead of being animated or skipped.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>('.skill').forEach((el, i) => {
         const fill = el.querySelector<HTMLElement>('.skill__fill')!;
         const pct = el.querySelector<HTMLElement>('.skill__pct')!;
         const level = Number(fill.dataset.level);
+        if (reduced) {
+          gsap.set(fill, { width: `${level}%` });
+          pct.textContent = `${level}/100`;
+          return;
+        }
         const counter = { v: 0 };
         gsap.fromTo(el, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, delay: i * 0.04 });
         gsap.fromTo(fill, { width: '0%' }, { width: `${level}%`, duration: 1, ease: 'power3.out', delay: i * 0.04 });
@@ -121,13 +132,18 @@ export default function About() {
 
   useEffect(() => () => window.clearTimeout(readTimer.current), []);
 
+  function closeShot() {
+    setShot(null);
+    window.requestAnimationFrame(() => shotButtonRef.current?.focus({ preventScroll: true }));
+  }
+
   // lightbox open: close on Escape, trap Tab inside the dialog, lock body scroll
   const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!shot) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setShot(null);
+        closeShot();
         return;
       }
       if (e.key === 'Tab' && boxRef.current) {
@@ -164,6 +180,7 @@ export default function About() {
   }
 
   const cert = CERTIFICATIONS.find((c) => c.id === disk);
+  const certNumber = cert ? String(CERTIFICATIONS.findIndex((item) => item.id === cert.id) + 1).padStart(2, '0') : '';
   const eduSel = EDUCATION.find((e) => e.id === book) ?? EDUCATION[0];
 
   return (
@@ -281,7 +298,7 @@ export default function About() {
                 <span className="dsk-mon__label">▚ VAULT.SYS — DRIVE A:</span>
                 <span className="dsk-mon__led" data-busy={reading || undefined} />
               </div>
-              <div className="dsk-mon__screen dsk-vault" aria-live="polite">
+              <div className={`dsk-mon__screen dsk-vault${cert && !reading ? ' dsk-vault--certificate' : ''}`} aria-live="polite">
                 {reading ? (
                   <div className="dsk-vault__load">
                     <div className="dsk-vault__prompt">A:\&gt; load {fileOf(pending!)}</div>
@@ -303,9 +320,19 @@ export default function About() {
                             >
                               {s.category}
                             </span>
-                            <span className="skill__pct">0/100</span>
+                            {/* the counter is rewritten every frame by GSAP: keep it
+                                out of the accessibility tree and expose the real
+                                value once, statically, on the bar itself */}
+                            <span className="skill__pct" aria-hidden="true">0/100</span>
                           </div>
-                          <div className="skill__bar">
+                          <div
+                            className="skill__bar"
+                            role="progressbar"
+                            aria-label={s.name}
+                            aria-valuenow={s.level}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          >
                             <div className="skill__fill" data-level={s.level} />
                           </div>
                         </div>
@@ -315,32 +342,44 @@ export default function About() {
                 ) : cert ? (
                   <div className="dsk-vault__body dsk-vault__cert">
                     <div className="dsk-vault__prompt">A:\&gt; load {fileOf(cert.id)}</div>
-                    <span className="dsk-vault__glyph">◆</span>
-                    <div className="dsk-vault__name">{cert.name}</div>
-                    <div className="dsk-vault__issuer">{cert.issuer}</div>
-                    <span className="dsk-vault__year">{cert.year}</span>
-                    <div className="dsk-vault__status">STATUS: VERIFIED ▪ ARCHIVED IN VAULT</div>
-                    {cert.image && (
-                      <button
-                        className="dsk-vault__shot"
-                        onClick={() => { sfx.click(); setShot(cert); }}
-                        aria-haspopup="dialog"
-                      >
-                        <img src={cert.image} alt={`${cert.name} — certificate scan`} loading="lazy" />
-                        <span className="dsk-vault__shot-hint">◉ CLICK TO ENLARGE</span>
-                      </button>
-                    )}
-                    {cert.verify && (
-                      <a
-                        className="dsk-vault__verify"
-                        href={cert.verify}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => sfx.click()}
-                      >
-                        ✓ VERIFY AT ISSUER ↗
-                      </a>
-                    )}
+                    <div className="dsk-vault__certcard">
+                      <div className="dsk-vault__meta">
+                        <div className="dsk-vault__filehead">
+                          <span>FILE {certNumber} · CERTIFICATE</span>
+                          <b>VERIFIED</b>
+                        </div>
+                        <h3>{cert.name}</h3>
+                        <p>{cert.issuer}</p>
+                        <div className="dsk-vault__archive-meta">
+                          <span><small>ISSUED</small><strong>{cert.year}</strong></span>
+                          <span><small>DRIVE</small><strong>A:</strong></span>
+                          <span><small>STATUS</small><strong>ARCHIVED</strong></span>
+                        </div>
+                        {cert.verify && (
+                          <a
+                            className="dsk-vault__verify"
+                            href={cert.verify}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => sfx.click()}
+                          >
+                            ✓ VERIFY RECORD ↗
+                          </a>
+                        )}
+                      </div>
+                      {cert.image && (
+                        <button
+                          ref={shotButtonRef}
+                          className="dsk-vault__shot"
+                          onClick={() => { sfx.click(); setShot(cert); }}
+                          aria-haspopup="dialog"
+                          aria-label={`Open ${cert.name} certificate in large viewer`}
+                        >
+                          <img src={cert.image} alt={`${cert.name} — certificate scan`} loading="lazy" />
+                          <span className="dsk-vault__shot-action">OPEN FULL CERTIFICATE <span aria-hidden="true">↗</span></span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ) : null}
               </div>
@@ -386,14 +425,14 @@ export default function About() {
           role="dialog"
           aria-modal="true"
           aria-label={`${shot.name} — certificate`}
-          onClick={() => { sfx.click(); setShot(null); }}
+          onClick={() => { sfx.click(); closeShot(); }}
         >
           <div className="certbox__frame" ref={boxRef} onClick={(e) => e.stopPropagation()}>
             <div className="certbox__strip">
               <span className="certbox__label">▚ CERT VIEWER — {fileOf(shot.id)}</span>
               <button
                 className="certbox__close"
-                onClick={() => { sfx.click(); setShot(null); }}
+                onClick={() => { sfx.click(); closeShot(); }}
                 aria-label="Close certificate viewer"
                 autoFocus
               >

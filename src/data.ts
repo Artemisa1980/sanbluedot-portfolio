@@ -2,14 +2,14 @@ export const PROFILE = {
   name: 'Sandy E. Quintero',
   handle: 'SANDY.SYSDEV',
   version: 'v2.0',
-  title: 'From Starbucks Barista to Retro DeV',
-  subtitle: 'UTEL BBA Student & AI Builder Apprentice',
+  title: 'Retail & Hospitality Operations to AI Builder',
+  subtitle: 'UTEL BBA Student & AI Builder',
   tagline:
-    "Born in the '80s, tech enthusiast, combining 20+ years of customer service & hospitality leadership with active Python and AI Builder learning paths.",
+    '20+ years in U.S. retail and hospitality operations, now combining a UTEL BBA path with Python, AI-assisted workflows, and interactive web projects.',
   location: 'Daule, Ecuador',
   email: 'sayma29@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/sandy-eq-30171254',
-  bio: 'I am a passionate operations professional who spent 20+ years with U.S. brands — Starbucks, JW Marriott, Hilton, and Holiday Inn — leading guest experiences in high-volume environments. Today, I fuse my absolute attention to detail and proactive problem-solving with AI Builder and retro web development. Currently pursuing a Business Administration & Finance degree at UTEL and an active AI Builder learning path, I construct interactive systems to demonstrate my growth and analytical capabilities.',
+  linkedin: 'https://www.linkedin.com/in/sandy-e-q-30171254',
+  bio: 'I am an operations professional with 20+ years working for U.S. brands — Starbucks, JW Marriott, Hilton, and Holiday Inn — in high-volume retail and hospitality environments. My experience spans team supervision, inventory and supplies control, quality standards, staff training, customer experience, and daily financial reporting. Now based in Ecuador, I am pursuing a BBA in Administration & Finance at UTEL while building practical AI-assisted workflows and interactive web projects.',
   quote: 'Hospitality teaches operational empathy, while code breeds structured logic.',
   languages: [
     { name: 'Spanish', level: 'Native / Bilingual' },
@@ -73,7 +73,7 @@ export interface ExperienceItem {
   company: string;
   role: string;
   period: string;
-  duration: string;
+  duration?: string;
   location: string;
   icon: string;
   bullets: string[];
@@ -82,70 +82,85 @@ export interface ExperienceItem {
 export const EXPERIENCE: ExperienceItem[] = [
   {
     id: 'starbucks',
-    company: 'Starbucks',
+    company: 'Starbucks Coffee Company',
     role: 'Barista',
-    period: 'Sep 2013 — Jun 2025',
-    duration: '11 yrs 10 mos',
+    period: '2013 — 2025',
+    duration: '11+ yrs',
     location: 'Miami, FL, USA',
     icon: '☕️',
     bullets: [
-      'Crafted premium specialty beverages with high consistency in fast-paced, high-volume retail environments.',
-      'Cultivated genuine loyalty by memorizing personal preferences of hundreds of recurring guests.',
-      'Onboarded and trained dozens of new partners, enforcing operational standards and safety best practices.',
-      'Continuously recognized for an outstanding positive attitude and strong leadership potential.',
+      'Ran peak-hour operations in a high-volume store while maintaining quality, speed, cleanliness, and safety standards.',
+      'Trained and guided new partners, demonstrating strong leadership potential.',
+      'Built customer loyalty through consistent service for more than 11 years.',
     ],
   },
   {
     id: 'marriott',
-    company: 'JW Marriott Hotel & Executive Apartments',
-    role: 'AM Housekeeping Supervisor',
-    period: 'Sep 2010 — May 2012',
-    duration: '1 yr 9 mos',
-    location: 'Miami, FL, USA',
+    company: 'JW Marriott Hotel & Marriott Executive Apartments',
+    role: 'AM Supervisor',
+    period: '2011 — 2013',
+    location: 'Miami, FL (Brickell), USA',
     icon: '🏨',
     bullets: [
-      'Supervised a morning housekeeping team of 8–10 room attendants to JW Marriott five-star luxury expectations, leading dedicated 6–8 person crews for VIP room turnovers.',
-      'Coordinated directly with front desk management and maintenance to respond instantly to guest issues.',
-      'Delivered brand orientation and structured safety training schedules for all new team members.',
+      'Supervised a morning housekeeping team of 8–10 room attendants, assigning tasks and inspecting rooms and public areas.',
+      'Managed supplies and inventory while coordinating with the front desk and maintenance.',
+      'Trained new team members on safety, brand standards, and cleaning protocols.',
     ],
   },
   {
     id: 'hilton',
     company: 'Hilton Worldwide',
     role: 'Night Auditor',
-    period: 'Feb 2008 — Apr 2010',
-    duration: '2 yrs 3 mos',
+    period: '2008 — 2010',
     location: 'Ocean City, MD, USA',
     icon: '🌙',
     bullets: [
-      'Managed overnight front office operations, balancing daily accounts and closing system-wide financial logs.',
-      'Provided high-standard guest services to late-night arrivals and handled emergency protocols calmly.',
+      'Audited and closed daily financial activity across all departments in Hilton OnQ, preparing reports for management.',
+      'Ran the overnight front desk independently and handled emergencies according to protocol.',
     ],
   },
   {
     id: 'pax',
     company: 'Pax Wholesome Foods',
-    role: 'Barista & Cashier',
-    period: 'Aug 2007 — Dec 2007',
-    duration: '5 mos',
+    role: 'Barista · Cash Handling',
+    period: '2007',
     location: 'New York, NY, USA',
     icon: '🗽',
     bullets: [
-      'Delivered fast, high-quality beverage service in a high-traffic Manhattan gourmet café environment.',
-      'Audited registers, processed complex cash & card transactions, and supported team layout shifts.',
+      'Handled barista service and cash transactions in a New York food-service setting.',
+    ],
+  },
+  {
+    id: 'outback',
+    company: 'Outback Steakhouse',
+    role: 'Line Cook',
+    period: '2004 — 2006',
+    location: 'Ocean City, MD, USA',
+    icon: '🔥',
+    bullets: [
+      'Worked grill, fry, and salad stations while coordinating evening tickets.',
+    ],
+  },
+  {
+    id: 'popeyes',
+    company: 'Popeyes',
+    role: 'Cashier',
+    period: '2004 — 2005',
+    location: 'Ocean City, MD, USA',
+    icon: '🧾',
+    bullets: [
+      'Handled cashier duties during evening shifts.',
     ],
   },
   {
     id: 'holiday-inn',
     company: 'Holiday Inn Hotel & Suites',
     role: 'Room Service & Housekeeping',
-    period: 'Oct 2003 — 2007',
-    duration: '~4 yrs',
+    period: '2003 — 2007',
     location: 'Ocean City, MD, USA',
     icon: '🛎️',
     bullets: [
-      'First role with a U.S. hospitality brand — ran room service and housekeeping operations to brand standards.',
-      'The starting point of 20+ years of continuous U.S. customer-service experience.',
+      'Supported room service and housekeeping operations in a U.S. hotel environment.',
     ],
   },
 ];
@@ -181,7 +196,6 @@ export interface Certification {
 
 /* years + issuers + verify URLs taken from the actual certificate documents (07-23) */
 export const CERTIFICATIONS: Certification[] = [
-  { id: 'ibm', name: 'AI Builder Professional Certificate', issuer: 'IBM / Coursera', year: 'In Progress', icon: '🌐' },
   { id: 'git', name: 'Getting Started with Git and GitHub', issuer: 'IBM / Coursera', year: '2026', icon: '🐙', image: '/certs/git.webp', verify: 'https://coursera.org/verify/O1RP4U5OS1K3' },
   { id: 'gai', name: 'Google AI Professional Certificate', issuer: 'Google', year: '2026', icon: '✨', image: '/certs/gai.webp', verify: 'https://coursera.org/verify/professional-cert/LLOXF3UICPUM' },
   { id: 'prompt', name: 'Google Prompting Essentials Specialization', issuer: 'Google', year: '2026', icon: '🧠', image: '/certs/prompt.webp', verify: 'https://coursera.org/verify/specialization/JHFBURP7QBVZ' },
@@ -191,9 +205,9 @@ export const CERTIFICATIONS: Certification[] = [
 
 export const EDUCATION = [
   { id: 'ibm-cert', institution: 'IBM Academy', degree: 'AI Builder Developer Course', period: 'Active Path' },
-  { id: 'utel', institution: 'UTEL Universidad', degree: 'Bachelor of Business Administration (BBA)', period: '2025 — Expected 2029' },
-  { id: 'worwic', institution: 'Wor-Wic Community College', degree: 'Hotel, Motel & Restaurant Management', period: '2008 — 2010' },
-  { id: 'ucsg', institution: 'U. Católica de Santiago de Guayaquil', degree: 'Business Management (Initial Studies)', period: '2001 — 2003' },
+  { id: 'utel', institution: 'UTEL Universidad', degree: 'BBA, Administration & Finance', period: 'Online · In progress · 2025—2029' },
+  { id: 'worwic', institution: 'Wor-Wic Community College', degree: 'Hotel, Motel & Restaurant Management coursework', period: 'Part-time · Not completed · 2008—2010' },
+  { id: 'ucsg', institution: 'Universidad Católica de Santiago de Guayaquil', degree: 'Business Management studies (Ing. Gestión Empresarial)', period: 'Part-time · Not completed · 2001—2003' },
 ];
 
 export interface TVChannel {
@@ -252,9 +266,9 @@ export const TV_CHANNELS: TVChannel[] = [
   },
 ];
 
-// short one-line messages on purpose (Sandy 07-16): the console must not wrap,
+// Illustrative entries, not repository history. Short one-line messages: the console must not wrap,
 // so the GH card and the mail terminal close at the same height
-export const COMMITS = [
+export const DEMO_COMMITS = [
   { date: '2025-08-10 14:32:01', hash: 'commit-8a1bf2', msg: 'docs: init retro portfolio' },
   { date: '2025-08-15 09:15:33', hash: 'commit-4e9d7c', msg: 'feat: start UTEL BBA track' },
   { date: '2025-11-20 18:22:11', hash: 'commit-3c5f2b', msg: 'study: IBM Full Stack path' },

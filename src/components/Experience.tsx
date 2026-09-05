@@ -9,7 +9,14 @@ export default function Experience() {
   const rootRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // GSAP writes inline styles, which the CSS reduced-motion block cannot reach.
+    // The rail starts at scaleY(0) in CSS, so it must be landed, not skipped.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ctx = gsap.context(() => {
+      if (reduced) {
+        gsap.set('.xp__rail-fill', { scaleY: 1 });
+        return;
+      }
       // gradient rail draws itself as you scroll the timeline
       gsap.to('.xp__rail-fill', {
         scaleY: 1,
@@ -24,13 +31,13 @@ export default function Experience() {
       gsap.utils.toArray<HTMLElement>('.xp__item').forEach((item, i) => {
         gsap.fromTo(
           item,
-          { x: i % 2 === 0 ? -90 : 90, opacity: 0 },
+          { x: () => (i % 2 === 0 ? -1 : 1) * Math.min(90, document.documentElement.clientWidth * 0.04), opacity: 0 },
           {
             x: 0,
             opacity: 1,
             duration: 0.8,
             ease: 'power3.out',
-            scrollTrigger: { trigger: item, start: 'top 82%' },
+            scrollTrigger: { trigger: item, start: 'top 82%', invalidateOnRefresh: true },
           }
         );
       });
@@ -62,7 +69,7 @@ export default function Experience() {
               <div className="xp__company">{job.company}</div>
               <div className="xp__meta">
                 <span>🗓 {job.period}</span>
-                <span>⏳ {job.duration}</span>
+                {job.duration && <span>⏳ {job.duration}</span>}
                 <span>📍 {job.location}</span>
               </div>
               <ul className="xp__bullets">

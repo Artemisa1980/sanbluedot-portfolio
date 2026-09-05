@@ -9,7 +9,7 @@ export default defineConfig({
         manualChunks: {
           three: ['three'],
           gsap: ['gsap'],
-          react: ['react', 'react-dom'],
+          react: ['react', 'react-dom', 'react-dom/client'],
         },
       },
     },

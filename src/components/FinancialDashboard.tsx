@@ -1,171 +1,83 @@
-// src/components/FinancialDashboard.tsx
-import { useEffect, useMemo, useRef } from 'react';
-import gsap from 'gsap';
+import { useState } from 'react';
 import type { ResearchLog } from '../data/researchLogs';
-import { sfx } from '../sound';
+import DeskTabs from './DeskTabs';
 
-const fmtUSD = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
+const views = [{ id: 'overview', label: 'Overview' }, { id: 'costs', label: 'Costs' }, { id: 'capital', label: 'Capital' }, { id: 'lifecycle', label: 'Lifecycle' }] as const;
+type View = typeof views[number]['id'];
+const chapterUrl = (chapter: string) => `https://github.com/Artemisa1980/ai-robot-race/blob/main/report/${chapter}.qmd`;
 
-interface FinancialDashboardProps {
-  log: ResearchLog;
-  onBack: () => void;
+function PixelRobot({ stage }: { stage: number }) {
+  return <svg className="desk-robot" viewBox="0 0 64 76" aria-hidden="true" shapeRendering="crispEdges">
+    <path d="M30 0h4v8h-4zM18 8h28v4h4v24h-4v4H18v-4h-4V12h4zM20 44h24v20H20zM8 44h8v20H8zM48 44h8v20h-8zM20 68h8v8H16v-4h4zM36 68h8v4h4v4H36z" fill="currentColor" />
+    <path d="M22 16h20v16H22z" fill="var(--paper)" /><path d="M24 20h4v4h-4zM36 20h4v4h-4zM28 28h8v2h-8z" fill="var(--olive)" />
+    <path d="M24 48h16v12H24z" fill="var(--gold)" /><rect x="28" y="51" width="8" height="6" fill={stage >= 4 ? 'var(--dustyblue)' : 'var(--olive)'} />
+  </svg>;
 }
 
-export default function FinancialDashboard({ log, onBack }: FinancialDashboardProps) {
-  const bomRef = useRef<HTMLDivElement>(null);
-  const valRef = useRef<HTMLDivElement>(null);
-  const barRefs = useRef<Array<SVGRectElement | null>>([]);
-  const valueRefs = useRef<Array<SVGTextElement | null>>([]);
-
-  // safe: only 'live' logs (which always carry financials) reach this component — gated in ResearchLogRow
-  const fin = log.financials!;
-
-  const chart = useMemo(() => {
-    const W = 360;
-    const H = 200;
-    const PAD = 30;
-    const BAR_W = 64;
-    const GAP = 30;
-    const max = Math.max(...fin.valuations.map((v) => v.amountB));
-    const bars = fin.valuations.map((v, i) => {
-      const h = (v.amountB / max) * (H - PAD * 2);
-      const x = PAD + i * (BAR_W + GAP);
-      const y = H - PAD - h;
-      return { ...v, x, y, h, barW: BAR_W };
-    });
-    return { W, H, PAD, bars };
-  }, [fin.valuations]);
-
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const tl = gsap.timeline();
-
-    const bomTarget = { v: fin.bomCost.from };
-    tl.to(
-      bomTarget,
-      {
-        v: fin.bomCost.to,
-        duration: reduced ? 0 : 0.9,
-        ease: 'power2.out',
-        onUpdate: () => {
-          if (bomRef.current) bomRef.current.textContent = fmtUSD(bomTarget.v);
-        },
-        onComplete: () => {
-          if (bomRef.current) bomRef.current.textContent = `< ${fmtUSD(fin.bomCost.to)}`;
-        },
-      },
-      0
-    );
-
-    const topValuation = fin.valuations[0];
-    const valTarget = { v: 0 };
-    tl.to(
-      valTarget,
-      {
-        v: topValuation.amountB,
-        duration: reduced ? 0 : 0.9,
-        ease: 'power2.out',
-        onUpdate: () => {
-          if (valRef.current) valRef.current.textContent = `$${valTarget.v.toFixed(1)}B`;
-        },
-      },
-      0
-    );
-
-    if (!reduced) {
-      barRefs.current.forEach((bar) => {
-        if (bar) gsap.set(bar, { transformOrigin: 'bottom', scaleY: 0 });
-      });
-      gsap.set(valueRefs.current.filter(Boolean), { opacity: 0, y: 8 });
-
-      barRefs.current.forEach((bar, i) => {
-        if (!bar) return;
-        tl.to(bar, { scaleY: 1, duration: 0.5, ease: 'back.out(1.4)' }, 0.3 + i * 0.12);
-      });
-      tl.to(
-        valueRefs.current.filter(Boolean),
-        { opacity: 1, y: 0, duration: 0.3, stagger: 0.12 },
-        0.5
-      );
-    } else {
-      barRefs.current.forEach((bar) => bar && gsap.set(bar, { scaleY: 1 }));
-      gsap.set(valueRefs.current.filter(Boolean), { opacity: 1, y: 0 });
-    }
-
-    return () => {
-      tl.kill();
-    };
-  }, [fin]);
-
-  return (
-    <div className="card fin-dash">
-      <button
-        type="button"
-        className="fin-dash__back"
-        onClick={() => { sfx.click(); onBack(); }}
-        onMouseEnter={() => sfx.hover()}
-      >
-        ← CALCULATOR
-      </button>
-      <h3 className="gh__title" style={{ marginBottom: 6 }}>📊 {log.title}</h3>
-      <p className="gh__sub" style={{ marginBottom: 22 }}>{log.legend}</p>
-
-      <div className="fin-dash__kpis">
-        <div className="kpi-tile">
-          <span className="kpi-tile__label">
-            BOM COST (CHINA) · {fin.bomCost.fromYear} → {fin.bomCost.toYear}
-          </span>
-          <div className="kpi-tile__value" ref={bomRef}>{fmtUSD(fin.bomCost.from)}</div>
-          <div className="kpi-tile__source">Source: {fin.bomCost.source}</div>
-        </div>
-        <div className="kpi-tile">
-          <span className="kpi-tile__label">TOP US VALUATION · {fin.valuations[0].asOf}</span>
-          <div className="kpi-tile__value" ref={valRef}>$0.0B</div>
-          <div className="kpi-tile__source">{fin.valuations[0].name} · {fin.valuations[0].source}</div>
-        </div>
-      </div>
-
-      <svg
-        className="fin-dash__chart"
-        viewBox={`0 0 ${chart.W} ${chart.H}`}
-        role="img"
-        aria-label="US humanoid startup valuations comparison"
-      >
-        {chart.bars.map((b, i) => (
-          <g key={b.name}>
-            <rect
-              ref={(el) => { barRefs.current[i] = el; }}
-              x={b.x}
-              y={b.y}
-              width={b.barW}
-              height={b.h}
-              fill={i === 0 ? '#f7c948' : '#eab13f'}
-              rx={4}
-            />
-            <text
-              ref={(el) => { valueRefs.current[i] = el; }}
-              x={b.x + b.barW / 2}
-              y={b.y - 8}
-              fill="#7cb3e8"
-              fontSize="13"
-              fontFamily="VT323"
-              textAnchor="middle"
-            >
-              ${b.amountB}B
-            </text>
-            <text
-              x={b.x + b.barW / 2}
-              y={chart.H - 8}
-              fill="#7cb3e8"
-              fontSize="11"
-              fontFamily="VT323"
-              textAnchor="middle"
-            >
-              {b.name}
-            </text>
-          </g>
-        ))}
-      </svg>
-    </div>
-  );
+export default function FinancialDashboard({ log }: { log: ResearchLog }) {
+  const [view, setView] = useState<View>('overview');
+  const [stage, setStage] = useState(0);
+  const fin = log.financials;
+  const analysis = log.analysis;
+  if (!fin || !analysis || !analysis.lifecycle.length || !fin.valuations.length) return <p className="desk-intro">This analysis is being prepared.</p>;
+  const active = analysis.lifecycle[Math.min(stage, analysis.lifecycle.length - 1)];
+  const maxValuation = Math.max(...fin.valuations.map(item => item.amountB));
+  return <div className="desk-workbench">
+    <div className="desk-heading"><span className="desk-eyebrow">RESEARCH FILE {log.number} / 2025–2035 OUTLOOK</span><h3>{log.title}</h3></div>
+    <DeskTabs id="research-view" label="Research view" items={views} value={view} onChange={setView} />
+    {views.map(tab => <div key={tab.id} id={`research-view-panel-${tab.id}`} role="tabpanel" aria-labelledby={`research-view-tab-${tab.id}`} hidden={view !== tab.id}>
+      {view === tab.id && <>
+        {view === 'overview' && <>
+          <div className="desk-thesis"><PixelRobot stage={0} /><div><span className="desk-eyebrow">THE CENTRAL QUESTION</span><h4>{analysis.thesis}</h4></div></div>
+          <p className="desk-intro">Follow the machine from its parts and financing to its working life, upgrades and recovery.</p>
+          <div className="desk-findings">{analysis.findings.map((finding, index) => <button type="button" key={finding.title} onClick={() => setView(finding.view)}>
+            <span>0{index + 1}</span><div><b>{finding.title}</b><p>{finding.body}</p></div><i aria-hidden="true">↗</i>
+          </button>)}</div>
+          <p className="desk-footnote">The hidden cost is a gap in measurement and responsibility, not a single established dollar total. <a href={chapterUrl('10-net-reckoning')} target="_blank" rel="noreferrer">Read the argument ↗</a></p>
+        </>}
+        {view === 'costs' && <>
+          <div className="desk-section-heading"><h4>What goes into the body?</h4><span className="desk-badge">PARTS ONLY</span></div>
+          <div className="desk-cost-pair">
+            <div><span>{fin.bomCost.fromYear} · ESTIMATE</span><strong>~${fin.bomCost.from.toLocaleString('en-US')}</strong></div>
+            <i aria-hidden="true">→</i><div><span>{fin.bomCost.toYear} · FORECAST</span><strong>&lt; ${fin.bomCost.to.toLocaleString('en-US')}</strong></div>
+          </div>
+          <p className="desk-intro">China-built humanoid bill of materials. This is not a retail price or a total ownership cost.</p>
+          <div className="desk-bars desk-bars--parts" aria-label="Projected 2030 bill of materials breakdown">
+            <div className="desk-bars__heading"><b>2030 projected parts mix</b><span>SHARE / %</span></div>
+            {analysis.components.map(item => <div className="desk-bar" key={item.name}>
+              <div className="desk-bar__label"><span>{item.name}</span><b>{item.share}%</b></div>
+              <div className="desk-bar__track" aria-hidden="true"><span className={item.motion ? 'desk-bar__motion' : ''} style={{ width: `${item.share}%` }} /></div>
+            </div>)}
+          </div>
+          <p className="desk-footnote">Actuators + hands = 70% of the projected parts bill. <a href={fin.bomCost.sourceUrl} target="_blank" rel="noreferrer">{fin.bomCost.source} · pp. 3–5 ↗</a></p>
+        </>}
+        {view === 'capital' && <>
+          <div className="desk-section-heading"><h4>The scale of the bet</h4><span className="desk-badge">DATED SNAPSHOTS</span></div>
+          <p className="desk-intro">Reported private valuations across the US robotics ecosystem. Different companies, different rounds.</p>
+          <div className="desk-bars desk-bars--capital" aria-label="Reported company valuations in US dollar billions">
+            <div className="desk-bars__heading"><b>Private valuation</b><span>USD BILLIONS</span></div>
+            {fin.valuations.map(item => <div className="desk-bar" key={item.name}>
+              <div className="desk-bar__label"><b>{item.name}</b><strong>${item.amountB}B</strong></div>
+              <div className="desk-bar__track" aria-hidden="true"><span style={{ width: `${item.amountB / maxValuation * 100}%` }} /></div>
+              <div className="desk-bar__meta"><span>{item.role} · {item.asOf}</span><a href={item.sourceUrl} target="_blank" rel="noreferrer">{item.source} ↗</a></div>
+            </div>)}
+            <div className="desk-bars__axis" aria-hidden="true"><span>$0B</span><span>${maxValuation / 2}B</span><span>${maxValuation}B</span></div>
+          </div>
+          <p className="desk-footnote">Research snapshots, not live prices. Valuation is not revenue, profit or the amount raised. <a href={chapterUrl('03-capital-investment')} target="_blank" rel="noreferrer">Chapter 3 context ↗</a></p>
+        </>}
+        {view === 'lifecycle' && <>
+          <div className="desk-section-heading"><h4>One robot. A whole lifecycle.</h4><span className="desk-badge">EXPLORE 8 STAGES</span></div>
+          <p className="desk-intro">Select a stage to follow the research beyond the launch.</p>
+          <div className="desk-lifecycle" aria-label="Robot lifecycle stages">
+            {analysis.lifecycle.map((item, index) => <button key={item.name} type="button" aria-pressed={stage === index} onClick={() => setStage(index)}><span>0{index + 1}</span>{item.name}</button>)}
+          </div>
+          <div className="desk-life-halves"><span>01–04 / ACQUIRE</span><span>05–08 / KEEP & RECOVER</span></div>
+          <div className="desk-life-card" aria-live="polite" aria-atomic="true">
+            <PixelRobot stage={stage} /><div><span className="desk-badge">{active.status}</span><h4>{active.title}</h4><p>{active.detail}</p><a href={chapterUrl(active.chapter)} target="_blank" rel="noreferrer">Read the source chapter ↗</a></div>
+          </div>
+          <p className="desk-footnote">Research findings reflect their cited dates. Gaps are shown as gaps; no robot lifespan or waste total is invented.</p>
+        </>}
+      </>}
+    </div>)}
+  </div>;
 }

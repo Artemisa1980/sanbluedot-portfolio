@@ -11,6 +11,7 @@ import Experience from './components/Experience';
 import TVStudio from './components/TVStudio';
 import SystemRoom from './components/SystemRoom';
 import Footer from './components/Footer';
+import { GAMES } from './data';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +22,7 @@ const MARQUEE_ITEMS = [
   '💻 AI BUILDER PATH',
   '🐙 GIT VERSION CONTROL',
   '🧠 PROMPT ENGINEERING',
-  '🕹️ 4 ARCADE CARTRIDGES',
+  `🕹️ ${GAMES.length} ARCADE CARTRIDGES`,
 ];
 
 function Marquee() {

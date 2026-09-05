@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SphereGallery from './SphereGallery';
 import GameShell from './GameShell';
+import { GAMES } from '../data';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +18,8 @@ export default function Arcade() {
 
   // sphere portal rises from below as you scroll in
   useEffect(() => {
+    // GSAP writes inline styles, which the CSS reduced-motion block cannot reach
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.sphere',
@@ -43,7 +46,7 @@ export default function Arcade() {
         <h2 className="section-title" style={{ color: 'var(--cream)' }}>
           SANDY'S <span style={{ color: 'var(--mint)' }}>DEV-STATION</span>
         </h2>
-        <p className="arcade__sub">SPHERICAL GAME VAULT • 6 CARTRIDGE SLOTS • DRAG TO EXPLORE • INSERT COIN</p>
+        <p className="arcade__sub">SPHERICAL GAME VAULT • {GAMES.length} CARTRIDGE SLOTS • DRAG TO EXPLORE • INSERT COIN</p>
       </div>
 
       <SphereGallery

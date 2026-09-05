@@ -6,17 +6,16 @@ export default function Footer() {
   return (
     <footer className="footer crt-fx">
       <div>
-        <div className="footer__name">✨ {PROFILE.name} • Retro DeV & Business Leader</div>
+        <div className="footer__name">✨ {PROFILE.name} • {PROFILE.title}</div>
         <p className="footer__sub">
-          Academic Business Administration credentials (UTEL BBA, Expected 2029) combined with an active
-          AI Builder path, agile code control versioning pipelines, and Google Prompting
-          engineering integration. Built with React, GSAP & Three.js — no placeholders, pure reality.
+          Business Administration student at UTEL (expected 2029), combining hospitality experience
+          with ongoing Python and AI Builder learning. Built with React, GSAP & Three.js.
         </p>
       </div>
       <div className="footer__host">
-        Host: AI Studio Cloud Run
+        Hosting: Firebase
         <br />
-        Port: 3000 Ingress SSL
+        sanbluedot.com
       </div>
       <button
         className="footer__top"

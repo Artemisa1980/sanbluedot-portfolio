@@ -182,22 +182,32 @@ export default function RubikCube({ className, frantic = false }: Props) {
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
 
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // frantic boot mode: auto-twist on an interval
     let autoTwist: ReturnType<typeof setInterval> | undefined;
-    if (frantic) {
+    if (frantic && !reduced) {
       autoTwist = setInterval(twistRandomLayer, 600);
     }
+
+    // skip rendering while the cube is scrolled out of view (same pattern as the
+    // hero starfield, the sphere gallery and the TV noise canvas)
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(mount);
 
     let raf = 0;
     const animate = () => {
       raf = requestAnimationFrame(animate);
+      if (!visible) return;
       if (!dragging) {
-        // inertia + gentle idle spin
-        cubeGroup.rotation.y += velX + 0.004;
+        // inertia + gentle idle spin (the idle spin and bob stop under reduced motion;
+        // the visitor's own drag inertia still plays out)
+        cubeGroup.rotation.y += velX + (reduced ? 0 : 0.004);
         cubeGroup.rotation.x += velY;
         velX *= 0.94;
         velY *= 0.94;
-        cubeGroup.position.y = Math.sin(performance.now() / 1100) * 0.12;
+        if (!reduced) cubeGroup.position.y = Math.sin(performance.now() / 1100) * 0.12;
       }
       renderer.render(scene, camera);
     };
@@ -206,6 +216,7 @@ export default function RubikCube({ className, frantic = false }: Props) {
     return () => {
       cancelAnimationFrame(raf);
       if (autoTwist) clearInterval(autoTwist);
+      io.disconnect();
       ro.disconnect();
       mount.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointermove', onMove);

@@ -17,6 +17,7 @@ export default function Header() {
   const [now, setNow] = useState(new Date());
   const [shrunk, setShrunk] = useState(false);
   const [mute, setMute] = useState(isMuted());
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const clock = setInterval(() => setNow(new Date()), 1000);
@@ -28,34 +29,66 @@ export default function Header() {
     };
   }, []);
 
-  const clock = now.toLocaleString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
+  const clock = now.toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
+    hourCycle: 'h23',
   });
+  const weekday = now.toLocaleDateString('en-US', { weekday: 'short' });
+  const date = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+  const clockLabel = `Local time: ${now.toLocaleString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short',
+  })}`;
 
   return (
     <header className={`header ${shrunk ? 'header--shrunk' : ''}`}>
-      <SanblueBadge className="header__logo" interactive />
-      <div className="header__id">
-        <span className="header__name">
-          {PROFILE.handle} <span className="header__ver">{PROFILE.version}</span>
-        </span>
-        <span className="header__sub">{PROFILE.subtitle}</span>
-        <SanblueWordmark className="header__brand" />
+      <div className="header__identity">
+        <SanblueBadge className="header__logo" interactive />
+        <div className="header__id">
+          <span className="header__name">
+            {PROFILE.handle} <span className="header__ver">{PROFILE.version}</span>
+          </span>
+          <span className="header__sub">{PROFILE.subtitle}</span>
+          <SanblueWordmark className="header__brand" />
+        </div>
       </div>
-      <nav className="header__nav">
+      <nav className={`header__nav${menuOpen ? ' header__nav--open' : ''}`} id="header-nav">
         {NAV.map((n) => (
-          <a key={n.href} href={n.href} className="header__link term" onClick={() => sfx.click()}>
+          <a
+            key={n.href}
+            href={n.href}
+            className="header__link term"
+            onClick={() => {
+              sfx.click();
+              setMenuOpen(false);
+            }}
+          >
             {n.label}
           </a>
         ))}
-        <span className="header__clock">🗓 {clock}</span>
+      </nav>
+      <div className="header__tools">
+        {/* only visible at ≤900px, where the nav is collapsed */}
+        <button
+          className="header__icon-btn header__menu"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          aria-controls="header-nav"
+          onClick={() => {
+            sfx.click();
+            setMenuOpen((open) => !open);
+          }}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+        <time className="header__clock" dateTime={now.toISOString()} aria-label={clockLabel} title={clockLabel}>
+          <span className="header__clock-screen" aria-hidden="true">
+            <span className="header__clock-led" />
+            <span className="header__clock-time">{clock}</span>
+            <span className="header__clock-date">{weekday} · {date}</span>
+          </span>
+        </time>
         <a
           className="header__icon-btn"
           href={PROFILE.linkedin}
@@ -78,7 +111,7 @@ export default function Header() {
         >
           {mute ? '🔇' : '🔊'}
         </button>
-      </nav>
+      </div>
     </header>
   );
 }

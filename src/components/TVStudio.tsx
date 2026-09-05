@@ -163,7 +163,7 @@ export default function TVStudio() {
                     loop
                     playsInline
                     controls
-                    preload="metadata"
+                    preload="none"
                     onPlay={() => setVideoPlaying(true)}
                     onPause={() => setVideoPlaying(false)}
                   />

@@ -21,3 +21,8 @@ docs/
 # Brand SOURCES stay on disk, never committed. Site-displayed assets in public/ ARE committed —
 # they ship to the public web anyway (decision 2026-07-15). Keep public/ to site-referenced files only.
 brand-assets/
+
+# Local agent config. launch.json is site tooling and stays tracked; the local
+# settings file holds machine paths and tool grants and must never be published.
+.claude/settings.local.json
+.maintenance-backups/

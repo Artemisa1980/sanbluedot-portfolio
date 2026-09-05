@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { COMMITS, PROFILE } from '../data';
+import { DEMO_COMMITS, PROFILE } from '../data';
 import { sfx } from '../sound';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,11 +12,12 @@ const GH_COLORS = ['rgba(19,26,67,0.08)', '#bbf7d0', '#6ee7b7', '#34d399', '#0d9
 export default function SystemRoom() {
   const rootRef = useRef<HTMLElement>(null);
   const stdoutRef = useRef<HTMLDivElement>(null);
+  const stdoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  // deterministic-ish contribution heatmap (seeded so it doesn't reshuffle per render)
+  // Illustrative heatmap, seeded so it doesn't reshuffle per render; no GitHub API connection.
   const cells = useMemo(() => {
     let seed = 20260611;
     const rand = () => {
@@ -36,7 +37,16 @@ export default function SystemRoom() {
   // entrance: terminals rise + desk slides in (like the reception/analytics diorama),
   // then the grid cells pop and the commit log types on
   useEffect(() => {
+    // GSAP writes inline styles, which the CSS reduced-motion block cannot reach.
+    // The grid cells and console lines start hidden in CSS, so they must be landed,
+    // not skipped.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ctx = gsap.context(() => {
+      if (reduced) {
+        gsap.set('.gh__cell', { scale: 1 });
+        gsap.set('.console__line', { opacity: 1 });
+        return;
+      }
       gsap.fromTo(
         '.dsk__row > *',
         { y: 70, opacity: 0 },
@@ -74,10 +84,14 @@ export default function SystemRoom() {
         scrollTrigger: { trigger: '.console', start: 'top 85%' },
       });
     }, rootRef);
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (stdoutTimerRef.current !== null) clearTimeout(stdoutTimerRef.current);
+    };
   }, []);
 
   function typeStdout(lines: string[]) {
+    if (stdoutTimerRef.current !== null) clearTimeout(stdoutTimerRef.current);
     const el = stdoutRef.current;
     if (!el) return;
     el.textContent = '';
@@ -92,30 +106,29 @@ export default function SystemRoom() {
         li++;
         ci = 0;
       }
-      setTimeout(tick, 12);
+      stdoutTimerRef.current = setTimeout(tick, 12);
     };
     tick();
   }
 
   function onSend(e: FormEvent) {
     e.preventDefault();
-    if (!name || !message) {
+    const sender = name.trim();
+    const content = message.trim();
+    if (!sender || !content) {
       sfx.locked();
       typeStdout(['SYS: ERROR — missing fields.', 'SYS: ENTER_NAME and ENTER_MESSAGE are required.']);
       return;
     }
     sfx.send();
     typeStdout([
-      `SYS: Handshake accepted — ${name}`,
-      'SYS: Compiling message packet… OK',
-      'SYS: Opening mail client via SMTP_RETRO…',
-      'SYS: Transmission ready. 📡',
+      'SYS: Opening your email app with a draft…',
+      'SYS: Review and send it from your email app.',
+      'SYS: Delivery is not tracked by this site.',
     ]);
-    const subject = encodeURIComponent(`[RETRO DEV-STATION] Connection request from ${name}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name}${email ? ` (${email})` : ''}`);
-    setTimeout(() => {
-      window.location.href = `mailto:${PROFILE.email}?subject=${subject}&body=${body}`;
-    }, 900);
+    const subject = encodeURIComponent(`[RETRO DEV-STATION] Connection request from ${sender}`);
+    const body = encodeURIComponent(`${content}\n\n— ${sender}${email.trim() ? ` (${email.trim()})` : ''}`);
+    window.location.href = `mailto:${PROFILE.email}?subject=${subject}&body=${body}`;
   }
 
   return (
@@ -137,13 +150,13 @@ export default function SystemRoom() {
                 <div className="card">
                   <div className="gh__head">
                     <div>
-                      <div className="gh__title">🐙 GitHub Log Activity Grid</div>
-                      <div className="gh__sub">{PROFILE.name} • get-github-certificate.sh</div>
+                      <div className="gh__title">🐙 GitHub Activity Demo</div>
+                      <div className="gh__sub">Illustrative grid and sample commits — not live data</div>
                     </div>
-                    <span className="gh__branch">⎇ branch: main</span>
+                    <span className="gh__branch">⎇ demo: main</span>
                   </div>
 
-                  <div className="gh__cells">
+                  <div className="gh__cells" aria-hidden="true">
                     {cells.map((level, i) => (
                       <i key={i} className="gh__cell" style={{ background: GH_COLORS[level] }} />
                     ))}
@@ -158,7 +171,7 @@ export default function SystemRoom() {
                       <i style={{ background: '#febc2e' }} />
                       <i style={{ background: '#28c840' }} />
                     </div>
-                    {COMMITS.map((c) => (
+                    {DEMO_COMMITS.map((c) => (
                       <div className="console__line" key={c.hash}>
                         <span className="t">[{c.date}]</span> <span className="b">main</span>{' '}
                         <span className="h">{c.hash}:</span> {c.msg}
@@ -183,66 +196,73 @@ export default function SystemRoom() {
           <div className="dsk-rig">
             <div className="dsk-mon__case">
               <div className="dsk-mon__strip">
-                <span className="dsk-mon__label">▚ MAILROOM.SYS — SMTP</span>
+                <span className="dsk-mon__label">▚ MAILROOM.SYS — MAILTO</span>
                 <span className="dsk-mon__led" />
               </div>
               <div className="dsk-mon__screen">
                 <form className="mail" onSubmit={onSend}>
                   <div className="mail__title">✉️ MAIL ROOM TERMINAL ✉️</div>
 
-                  <div className="mail__prompt">
+                  {/* real <label>s: the accessible name must contain the visible
+                      prompt text (WCAG 2.5.3 Label in Name) */}
+                  <label className="mail__prompt" htmlFor="mail-name">
                     GUEST@SANDY.SYS:~$ <b>ENTER_NAME</b>
-                  </div>
+                  </label>
                   <input
+                    id="mail-name"
                     name="name"
                     autoComplete="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your Name or Company"
-                    aria-label="Your name"
                   />
 
-                  <div className="mail__prompt">
+                  <label className="mail__prompt" htmlFor="mail-email">
                     GUEST@SANDY.SYS:~$ <b>ENTER_EMAIL</b>
-                  </div>
+                  </label>
                   <input
+                    id="mail-email"
                     type="email"
                     name="email"
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="recruiter@company.com"
-                    aria-label="Your email"
                   />
 
-                  <div className="mail__prompt">
+                  <label className="mail__prompt" htmlFor="mail-message">
                     GUEST@SANDY.SYS:~$ <b>ENTER_MESSAGE</b>
-                  </div>
+                  </label>
                   <textarea
+                    id="mail-message"
                     name="message"
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type your connection request or greeting here…"
-                    aria-label="Your message"
                   />
 
                   <button className="mail__send" type="submit">
                     📡 RUN CONNECT_MAIL
                   </button>
 
-                  <div className="mail__stdout" ref={stdoutRef}>
-                    {`SYS: Awaiting guest handshake…\nSYS: Execute 'send_mail --interactive' or click shortcuts below.`}
+                  <div className="mail__stdout" ref={stdoutRef} role="status" aria-live="polite">
+                    {`SYS: Opens your email app with a draft.\nSYS: Review and send there; delivery is not tracked.`}
                   </div>
 
                   <div className="mail__shortcuts">
                     <button
                       type="button"
                       className="mail__shortcut"
-                      onClick={() => {
-                        navigator.clipboard?.writeText(PROFILE.email);
-                        sfx.pop();
-                        typeStdout([`SYS: ${PROFILE.email} copied to clipboard. 📋`]);
+                      onClick={async () => {
+                        try {
+                          if (!navigator.clipboard) throw new Error('Clipboard unavailable');
+                          await navigator.clipboard.writeText(PROFILE.email);
+                          sfx.pop();
+                          typeStdout([`SYS: ${PROFILE.email} copied to clipboard. 📋`]);
+                        } catch {
+                          typeStdout([`SYS: Copy unavailable. Email: ${PROFILE.email}`, 'SYS: Use OPEN EMAIL CLIENT below.']);
+                        }
                       }}
                     >
                       ⧉ COPY GMAIL

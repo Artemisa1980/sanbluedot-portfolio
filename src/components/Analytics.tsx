@@ -1,6 +1,6 @@
 // src/components/Analytics.tsx — EXECUTIVE ANALYTICS DESK
 // Same retro-CRT-workstation diorama as the Reception desk (Sandy 07-18):
-// LEFT = the BBA compound-interest calculator (swaps to FinancialDashboard) in a
+// LEFT = the BBA calculator lab and research explorer in a
 // monitor on a stand · RIGHT = Study Files & Research Logs in a monitor stacked on
 // the SANDY-86 CPU · both seated on the wood desk with the same props. Reuses the
 // .dsk-* terminal chrome; .dsk--analytics re-inks the content onto the paper screen.
@@ -10,6 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CompoundCalculator from './CompoundCalculator';
 import FinancialDashboard from './FinancialDashboard';
 import ResearchLogRow from './ResearchLogRow';
+import DeskTabs from './DeskTabs';
 import { researchLogs } from '../data/researchLogs';
 import { sfx } from '../sound';
 
@@ -18,39 +19,38 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Analytics() {
   const rootRef = useRef<HTMLElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
+  const archiveRef = useRef<HTMLHeadingElement>(null);
+  const focusAnalysis = useRef(false);
+  const [mode, setMode] = useState<'calculators' | 'research'>('calculators');
   const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
+  const selectedLog = researchLogs.find(log => log.id === selectedLogId) ?? researchLogs.find(log => log.status === 'live');
+  const modes = [{ id: 'calculators', label: '▦ Calculators' }, { id: 'research', label: '▣ Research' }] as const;
 
-  const selectedLog = selectedLogId
-    ? researchLogs.find((l) => l.id === selectedLogId) ?? null
-    : null;
-
-  const swapTo = (next: () => void) => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || !leftPanelRef.current) {
-      next();
-      return;
-    }
-    gsap.to(leftPanelRef.current, {
-      opacity: 0,
-      y: -16,
-      duration: 0.25,
-      ease: 'power1.in',
-      onComplete: () => {
-        next();
-        gsap.fromTo(
-          leftPanelRef.current,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-        );
-      },
-    });
+  const showMode = (next: 'calculators' | 'research') => {
+    setMode(next);
+    if (leftPanelRef.current) leftPanelRef.current.scrollTop = 0;
+    if (next === 'research' && !selectedLogId && selectedLog) setSelectedLogId(selectedLog.id);
   };
-
-  const handleSelect = (id: string) => swapTo(() => setSelectedLogId(id));
-  const handleBack = () => swapTo(() => setSelectedLogId(null));
+  const goToAnalysis = () => {
+    if (leftPanelRef.current) leftPanelRef.current.scrollTop = 0;
+    leftPanelRef.current?.focus({ preventScroll: true });
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      leftPanelRef.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  };
+  const handleSelect = (id: string) => {
+    if (mode === 'research' && selectedLogId === id) { goToAnalysis(); return; }
+    focusAnalysis.current = true;
+    setSelectedLogId(id);
+    setMode('research');
+  };
+  useEffect(() => {
+    if (focusAnalysis.current) { goToAnalysis(); focusAnalysis.current = false; }
+  }, [mode, selectedLogId]);
 
   // entrance: terminals rise, desk slides in (scoped to this section by gsap.context)
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.dsk__row > *',
@@ -94,12 +94,20 @@ export default function Analytics() {
                 <span className="dsk-mon__label">▚ ANALYTICS.SYS</span>
                 <span className="dsk-mon__led" />
               </div>
-              <div className="dsk-mon__screen" ref={leftPanelRef}>
-                {selectedLog ? (
-                  <FinancialDashboard log={selectedLog} onBack={handleBack} />
-                ) : (
-                  <CompoundCalculator />
-                )}
+              <div className="dsk-mon__screen">
+                <div className="desk-shell" ref={leftPanelRef} id="analysis-workbench" role="region" tabIndex={-1} aria-label="Analysis workbench">
+                  <DeskTabs id="desk-mode" label="Workbench mode" items={modes} value={mode} onChange={showMode} primary />
+                  <div id="desk-mode-panel-calculators" role="tabpanel" aria-labelledby="desk-mode-tab-calculators" hidden={mode !== 'calculators'}>
+                    <CompoundCalculator />
+                  </div>
+                  <div id="desk-mode-panel-research" role="tabpanel" aria-labelledby="desk-mode-tab-research" hidden={mode !== 'research'}>
+                    {selectedLog && <FinancialDashboard key={selectedLog.id} log={selectedLog} />}
+                    <button className="desk-return" type="button" onClick={() => {
+                      archiveRef.current?.focus({ preventScroll: true });
+                      archiveRef.current?.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+                    }}>Back to research files →</button>
+                  </div>
+                </div>
               </div>
               <div className="dsk-mon__vents"><i /><i /><i /></div>
             </div>
@@ -121,11 +129,13 @@ export default function Analytics() {
                 <span className="dsk-mon__led" />
               </div>
               <div className="dsk-mon__screen">
-                <div className="dsk-vault__prompt">A:\&gt; dir RESEARCH /LOGS</div>
-                <div className="research-list">
-                  {researchLogs.map((log) => (
-                    <ResearchLogRow key={log.id} log={log} onSelect={handleSelect} />
-                  ))}
+                <div className="desk-archive">
+                  <div className="desk-archive__head"><span className="desk-eyebrow">A:\&gt; DIR /RESEARCH</span><span className="desk-archive__count">{String(researchLogs.filter(log => log.status === 'live').length).padStart(2, '0')} PUBLISHED / {String(researchLogs.filter(log => log.status === 'coming-soon').length).padStart(2, '0')} QUEUED</span></div>
+                  <h3 ref={archiveRef} tabIndex={-1}>Ideas worth opening.</h3>
+                  <p className="desk-intro">Load a published file or inspect what is waiting in the research queue.</p>
+                  <div className="desk-files">
+                    {researchLogs.map(log => <ResearchLogRow key={log.id} log={log} selected={selectedLogId === log.id} onSelect={handleSelect} />)}
+                  </div>
                 </div>
               </div>
               <div className="dsk-mon__vents"><i /><i /><i /></div>
@@ -160,10 +170,21 @@ export default function Analytics() {
         <div className="dsk__desk" />
       </div>
 
-      <p className="analytics__note">
-        “Financial modeling matches operational predictability. As I advance in my BBA path at UTEL, I will
-        keep growing this dashboard with new research logs and the financial models behind each one.”
-      </p>
+      <aside className="analytics__service-ticket" aria-label="Asset decision context">
+        <div className="analytics__service-stamp">
+          <span>SERVICE TICKET</span>
+          <strong>R / U / R · 01</strong>
+        </div>
+        <div className="analytics__service-copy">
+          <strong>Model the next useful life before the next purchase.</strong>
+          <p>The lowest modeled cost is one signal. Downtime and what happens to old hardware stay visible beside it.</p>
+        </div>
+        <ul className="analytics__service-checks" aria-label="Decision checks">
+          <li><span>01</span>COST PATH</li>
+          <li><span>02</span>SERVICE DAYS</li>
+          <li><span>03</span>MATERIAL ROUTE</li>
+        </ul>
+      </aside>
     </section>
   );
 }
